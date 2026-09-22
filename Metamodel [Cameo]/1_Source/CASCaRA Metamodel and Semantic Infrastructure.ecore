@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="CASCaRA Metamodel">
+  <eAnnotations source="## Design goals&#xA;- **Separated syntax and semantics**: The metamodel governs the graph pattern independently of the ontology. Any software depends on the metamodel and doesn’t need change, when the ontology evolves over time.&#xA;- **Simple transformation**: A graph pattern is designed which may be represented in RDF, JSON-LD, GQL and OOP alike. Bidirectional transformations between any of those formats shall be possible without data-loss. Admittedly this ‘sweet-spot’ has reduced expressivity when compared with any of the listed data formats, but the choice of implementation technologies is maximized. Verification and validation will show that the resulting expressivity of the graph is sufficient for the purpose.&#xA;- **Federated data-spaces**: The general use of URIs (or UUIDs wirh namespace) as identifier like RDF allows linked data to reside in multiple internet servers and still form a valid graph which can be seamlessly traversed and queried.&#xA;&#xA;"
+      references="#/"/>
+  <eClassifiers xsi:type="ecore:EClass" name="aProperty" eSuperTypes="#//Item">
+    <eAnnotations source="Each property belongs to a single [[anEntity]], [[aRelationship]] or [[aPackage]]. A property has *no* identifier, thus a property update results in a new revision of the item to which it belongs. Is 'payload' having a clear meaning, datatype and range through the respective Property class.&#xA;&#xA;Details:&#xA;- A property may be required or not depending on the attributes minCount and maxCount of its class, but an existing property must have a value.&#xA;- A property may be composed of multiple properties to form a structured data set according to its [[Property]] class.&#xA;"
+        references="#//aProperty"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" ordered="false" lowerBound="1"
+        eType="#//Property">
+      <eAnnotations references="#//aProperty/%"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false"
+        lowerBound="1" upperBound="-1">
+      <eAnnotations source="The value of a property.&#xA;&#xA;Details:&#xA;- If the datatype of the property's class is string, the value is a language string consisting of value and IETF language tag ('multiLangueText').&#xA;- Otherwise the value is a simple value.&#xA;- Values of all datatypes are represented as a string in all data formats, even JSON and JSON-LD."
+          references="#//aProperty/value"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" ordered="false" lowerBound="1"
+        upperBound="-1" eType="#//aProperty" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="aSourceLink" eSuperTypes="#//aLink">
+    <eAnnotations source="A link instance serving as source for a reified relationship.&#xA;&#xA;From a semantic point of view, there is no need to make a distinction between aSourceLink and aTargetLink at the metamodel level. The distinction can be done and *is made* at ontology level in the [[CASCaRA Semantic Infrastructure]]. However it is much easier to check the pattern/schema/shape and to ingest data, if the itemType is explicit.&#xA;&#xA;Details:&#xA;- aSourceLink may be required or not depending on the attributes minCount and maxCount of its class, but an existing one must have a value.&#xA;&#xA;&#xA;Example: &#xA;- A single 'satisfies' relationship can relate one or many function instances to a requirement instance. "
+        references="#//aSourceLink"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Identifiable" abstract="true" eSuperTypes="#//Item">
+    <eAnnotations source="All technical sub-classes of this class are identifiable, means they have an identifier, a title (name) and optionally a description. &#xA;&#xA;Details:&#xA;- The class is abstract.&#xA;- All attributes are inherited by its subclasses.&#xA;- All class level items in the upper part of the diagram are commonly released and made available with an URL path including the revision. Hence, multiple revisions of the class set may exist in parallel.&#xA;- All instance level items in the lower part of the diagram may have individual revisions with their respective revision, modification date and creator. The prior revision identifier is memorized to support change history and branching. In case of a merge, there are two prior revisions.&#xA;&#xA;"
+        references="#//Identifiable"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="A globally unique identifier, either a fully qualified URI or a name with namespace standing for an URI, see [[aPackage]] [[context]]."
+          references="#//Identifiable/id"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="A multiLanguageText. Maps to dcterms:title.&#xA;&#xA;Details:&#xA;- Here a multiplicity [0..1] is given, but in fact that depends on the itemType. &#xA;- For all classes (Enumeration, Property, Link, Entity and Relationship), a title is mandatory. &#xA;- In case of anEntity at least one of title or description is required, because it must be possible to represent a text paragraph as anEntity, which simply does not have a title.&#xA;- In case of aRelationship both title and description are optional. If missing the title and/or description of the respective Relationship class applies. This avoids lots of repetition in real-world data-sets.&#xA;- The same applies for aProperty, aSourceLink and aTargetLink; both title and description are optional."
+          references="#//Identifiable/title"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="A multiLanguageText.  Maps to dcterms:description.&#xA;&#xA;Details:&#xA;- Here a multiplicity [0..1] is given, but in fact that depends on the itemType. &#xA;- For all classes (Enumeration, Property, Link, Entity and Relationship), a title is mandatory. &#xA;- In case of anEntity at least one of title or description is required, because it must be possible to represent a text paragraph as anEntity, which simply does not have a title.&#xA;- In case of aRelationship both title and description are optional. If missing the title and/or description of the respective Relationship class applies. This avoids lots of repetition in real-world data-sets.&#xA;- The same applies for aProperty, aSourceLink and aTargetLink; both title and description are optional."
+          references="#//Identifiable/description"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="revision" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="A unique string identifying the revision of the entity or relationship instance."
+          references="#//Identifiable/revision"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priorRevision" ordered="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="Links to the previous revisions of an entity or relationship instance. It is a list with &#xA;- zero elements, if it is the first revision,&#xA;- one element for a subsequent revision or&#xA;- two elements when two branches are merged."
+          references="#//Identifiable/priorRevision"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="creator" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="The person committing the last change. Is often an e-mail address."
+          references="#//Identifiable/creator"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Element" abstract="true" eSuperTypes="#//Identifiable">
+    <eAnnotations source="A technical super-class of [[Entity]] (class of entities) and [[Relationship]] (class of relationships). &#xA;&#xA;Details:&#xA;- The class is abstract.&#xA;- All attributes and associations are inherited by its technical sub-classes Entity and Relationship.&#xA;- The globalTitle of the Elements is used to integrate the instances of a partial graphs to an overarching CASCaRA graph.&#xA;"
+        references="#//Element"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" ordered="false" upperBound="-1"
+        eType="#//Property"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="definition" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="A multiLanguageText mandatory for all classes. Maps to skos:definition.&#xA;"
+          references="#//Element/definition"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="icon" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="An icon defined with a class can be used to decorate the instances.&#xA;&#xA;Example: &#xA;- Folders as sub-class of Organizer and thus Entity may specify a UTF-8 character 🗀 for use by folders grouping certain model-elements.&#xA;- A data-URL of an icon is also permitted."
+          references="#//Element/icon"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="globalTitle" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="The title assigned by matching the title with the terms of the ontology by the 'globalize' operation. "
+          references="#//Element/globalTitle"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modified" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="A ISO-8601 DateTime value recording the point in time of the last change.&#xA;&#xA;Details:&#xA;- In case of anElement (and its subclasses), this property is mandatory.&#xA;- In case of Element (and its subclasses), this property is redundant if the revision is included in the URI and it is mandatory otherwise."
+          references="#//Element/modified"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Link" eSuperTypes="#//Configurable">
+    <eAnnotations source="A Link is an identifiable link class. A Link is an owl:ObjectProperty.&#xA;&#xA;Example: &#xA;- An Organizer (semantic sub-class of Entity) may list Model-Elements (another semantic sub-class of Entity) to provide a document outline.&#xA;- As such the Link class *lists* is specified as enumeratedTargetLink by Organizer."
+        references="#//Link"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enumeratedEndpoint" ordered="false"
+        lowerBound="1" upperBound="-1" eType="#//Element"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCount" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="An instance must have at least this number of properties of this class. Is '0' by default. This applies to both instances of a Property class and a Link class.&#xA;&#xA;For example, if a property class 'Priority' has a minCount=1 and a requirement class specifies an enumeratedProperty 'Priority', a requirement instance must have at least one property of class Priority (with a value)."
+          references="#//Link/minCount"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxCount" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="An instance must have at most this number of properties of this class. Is unbounded (infinite) by default. This applies to both instances of a Property class and a Link class.&#xA;&#xA;For example, if a property class 'Priority' has a maxCount=1 and a requirement class specifies an enumeratedProperty 'Priority', a requirement instance must have no more than one property of class Priority (with a value)."
+          references="#//Link/maxCount"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="revisionAware" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="Indicates whether an instance of this class points to a *specific* or *any* revision of the specified endpoint. In case of the former, the key of such a link instance must contain both identifier and revision. Default is false, so the relationship points to any revision of the endpoint; in that case the key only contains just the identifier.&#xA;&#xA;Examples:&#xA;- A 'lists' link of an outline shall continue to apply to an endpoint, even if updated. So *revisionAware* is omitted or set to 'false'.&#xA;- A 'verifies' relation shall apply between specific revisions of a *test-case* and a *requirement*. So the classes of both aSourceLink and aTargetLink set *revisionAware* to 'true'. If the *requirement* is updated, it does not have a 'verifies' link, until explicitly set after repeating the *test-case*. &#xA;- Of course, only one of the link classes of a Relationship class can be 'revisionAware'."
+          references="#//Link/revisionAware"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specializes" ordered="false"
+        eType="#//Link"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="Optional default value(s) in case a modelElement's property does not have an individual value when instantiated.  It may be changed later on and must follow the definitions of the PropertyClass resp. LinkClass at all times, of course.&#xA;&#xA;Here, the attribute is named 'defaultValue' for clarity and may just be called 'value' in an implementation, as all restrictions and operations of a property's value apply."
+          references="#//Link/defaultValue"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="readOnly" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="The link value of an instance may not be updated or deleted, once assigned. &#xA;"
+          references="#//Link/readOnly"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="aTargetLink" eSuperTypes="#//aLink">
+    <eAnnotations source="A link instance pointing to the target of a reified aRelationship or to one or more targets of anEntity.&#xA;&#xA;From a semantic point of view, there is no need to make a distinction between aSourceLink and aTargetLink at the metamodel level. The distinction can be done and *is made* at ontology level in the [[CASCaRA Semantic Infrastructure]]. However it is much easier to check the pattern/schema/shape and to ingest data, if the itemType is explicit.&#xA;&#xA;Details:&#xA;- aTargetLink may be required or not depending on the attributes minCount and maxCount of its class, but an existing one must have a value.&#xA;&#xA;Example: &#xA;- A 'satisfies' relationship can relate a function instance to one or multiple requirement instances (targets).&#xA;- An organizer (see [[CASCaRA Semantic Infrastructure]]) such as a chapter title (folder) in an outline can point to one or more contained items, be it anEntity or aRelationship or other.&#xA;- [[anEntity]], [[aRelationship]] or [[aPackage]] may point to value of an [[Enumeration]]."
+        references="#//aTargetLink"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Entity" eSuperTypes="#//Element">
+    <eAnnotations source="Entity is a class of model elements, such as a system component or a requirement. An Entity is an owl:Class.&#xA;&#xA;Details:&#xA;- Entity should have a title (name) and may have a description (definition).&#xA;- Entity may specify (configure) zero to many classes of properties its instances may have. &#xA;- The definitions of the entity together with those of the properties may be used to build user dialogs with input verification as well as to check its instances whether all property values have a correct type and value range as well as whether all required ones are present.&#xA;"
+        references="#//Entity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specializes" ordered="false"
+        eType="#//Entity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enumeratedTargetLink" ordered="false"
+        upperBound="-1" eType="#//Link"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="anEntity" eSuperTypes="#//anElement">
+    <eAnnotations source="Is used for instances of model-elements such as a system component or a requirement. Is 'payload' having a clear meaning through the respective Entity class.&#xA;&#xA;Details:&#xA;- An entity must have either a title or a description - or both. This allows to compose documents including text paragraphs without title. &#xA;- The entity's class enumerates the classes of properties it may have.&#xA;"
+        references="#//anEntity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false" lowerBound="1"
+        eType="#//Entity">
+      <eAnnotations references="#//anEntity/type"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" ordered="false" upperBound="-1"
+        eType="#//aTargetLink" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="aRelationship" eSuperTypes="#//anElement">
+    <eAnnotations source="Is used for relations between entities, such as a 'system component satisfies a requirement'. All relationships are bilateral and directed. Is 'payload' having a clear meaning through the respective Relationship class.&#xA;&#xA;Details:&#xA;- This is a reified graph edge and must have exactly one source and target entity each. The source must be an entity or relationship with a class defined by an eligible source class of its [[Relationship]]. The same applies for the target.&#xA;- Even though a relationship instance may have an individual title, it is advised to omit it and assume its class' title when needed to assure that relationships of the same class are named equally.&#xA;- The relationship's class enumerates the classes of properties it may have.&#xA;"
+        references="#//aRelationship"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" ordered="false" lowerBound="1"
+        eType="#//Relationship">
+      <eAnnotations references="#//aRelationship/%"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" ordered="false" lowerBound="1"
+        eType="#//aTargetLink" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" ordered="false" lowerBound="1"
+        eType="#//aSourceLink" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Item" abstract="true">
+    <eAnnotations source="The technical super-class of all CASCaRA metamodel items specifying the type of item to allow for simple schema checking and transformation.&#xA;&#xA;Details:&#xA;- The class is abstract.&#xA;"
+        references="#//Item"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="itemType" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="Classifies classes and individuals (instances) in terms of this metamodel. It must be made explicit in all representations without native reasoner, such as in object-oriented programming, JSON, JSON-LD and XML. It can be omitted in RDF/OWL, as at the top of the class hierarchy there shall be a class corresponding to the metamodel itemType (see [[CASCARA Semantic Infrastructure]] and the itemType can be derived with a standard OWL reasoner.&#xA;&#xA;Details:&#xA;- Here it is modeled as a string, but in fact it is an enumerated value from all concrete metamodel items (represented as UML classes), thus [Enumeration, Link, Property, Entity, Relationship, aPackage, aSourceLink, aTargetLink, aProperty, anEntity, aRelationship]."
+          references="#//Item/itemType"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="aLink" abstract="true" eSuperTypes="#//Item">
+    <eAnnotations source="Is a technical super-class for link instances.&#xA;&#xA;Details:&#xA;- The class is abstract.&#xA;- A list of enumerated endpoints (references) per link instance is possible.&#xA;- If the class is set to *versionAware*, all pointers to an endpoint must contain both identifier and revision.&#xA;"
+        references="#//aLink"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" ordered="false" lowerBound="1"
+        upperBound="-1" eType="#//anElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false" lowerBound="1"
+        eType="#//Link"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="anElement" abstract="true" eSuperTypes="#//Identifiable">
+    <eAnnotations source="A technical superclass of [[anEntity]] and [[aRelationship]]. &#xA;&#xA;Details:&#xA;- The class is abstract.&#xA;- All attributes and associations are inherited by its sub-classes.&#xA;- Sub-classes may have individual revisions with revision id, modification date and creator. The prior revision id is memorized to support change history and branching. In case of a merge, there are two prior revisions.&#xA;&#xA;&#xA;"
+        references="#//anElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" ordered="false" upperBound="-1"
+        eType="#//aProperty" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modified" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="A ISO-8601 DateTime value recording the point in time of the last change.&#xA;&#xA;Details:&#xA;- In case of anElement (and its subclasses), this property is mandatory.&#xA;- In case of Element (and its subclasses), this property is redundant if the revision is included in the URI and it is mandatory otherwise."
+          references="#//anElement/modified"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Property" eSuperTypes="#//Configurable">
+    <eAnnotations source="Every class [[Entity]] and [[Relationship]] can have an individual set of configurable properties, each of which is uniquely defined by datatype and range. A Property is an owl:ObjectProperty when enumeratedValues are defined and is an owl:DatatypeProperty otherwise.&#xA;&#xA;Example: A requirement might have a list with three properties, such as &#xA;- *Title* with data type „String of max. length 96“, &#xA;- *Description* with data type „String“ wíthout length restriction and &#xA;- *Priority* with data type „String with a single choice of ['high', 'medium', 'low']“.&#xA;&#xA;Details:&#xA;- Property class must have a title and may have a description named.&#xA;- Property class may define a minimum and maximum count of values.&#xA;- Property class must define a datatype and may restrict its range by minInclusive, maxInclusive or or a pattern defined by Regular Expression.&#xA;-  Property class may define a set of enumerated values which must of course satisfy its own data type and range&#xA;- A property class may define a default value which must of course satisfy its own data type and range.&#xA;- Property class may be composed of multiple property classes to form a structured data type (xs:complexType). The structure must be a tree, thus without cyclic dependency.&#xA;"
+        references="#//Property"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="datatype" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="One of the xs: data types. Shall be anyURI." references="#//Property/datatype"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxLength" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="Maximum length of a property value with datatype 'xs:string'. Is not allowed with any other datatype."
+          references="#//Property/maxLength"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minInclusive" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="The minimum value a property of this type may have. May be applied only for numeric datatypes.  It the intrinsic minimum value of the datatype by default."
+          references="#//Property/minInclusive"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxInclusive" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="The maximum value a property of this type may have. May be applied only for numeric datatypes. It the intrinsic maximum value of the datatype by default."
+          references="#//Property/maxInclusive"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pattern" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="A Regular Expression that must evaluate successfully with the property value. Can also be used to limit the number of decimals of a number, as there is no restriction like xs:fractionDigits in SHACL."
+          references="#//Property/pattern"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" ordered="false" upperBound="-1"
+        eType="#//Property" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" ordered="false" eType="#//Property"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Relationship" eSuperTypes="#//Element">
+    <eAnnotations source="Relationship is a class of relationships between two entities to allow assertions such as 'a system component satisfies a requirement'. All relationships are bilateral and directed. This allows for statements according to propositional logic. They can be easily mapped to many technologies such as RDF or even ReqIF. Being reified, a Relationship is an owl:Class.&#xA;&#xA;Details:&#xA;- Relationship must have a title (name) and may have a description (definition).&#xA;- Relationship lists zero to many property classes its instances may have.&#xA;- Relationship may define (configure) entitiy classes or relationship classes, whose instances are eligible as source resp. target in a relationship. If none are defined, all entities and relationships are eligible.&#xA;- Relationship is reified (as a rdfs:Resource in RDF), so that it can be a source or target of another Relationship - to make a statement on a statement.&#xA;- The definitions of a relationship together with those of their properties may be used to build user dialogs with input verfication and to check its instances whether all properties have a correct type and value range as well as whether all required ones are present.&#xA;&#xA;"
+        references="#//Relationship"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" ordered="false" eType="#//Relationship"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" ordered="false" lowerBound="1"
+        eType="#//Link"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" ordered="false" lowerBound="1"
+        eType="#//Link"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="globalReversed" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="If set, the instances of the Relationship are interpreted in reverse direction when evaluated in the global graph.&#xA;&#xA;Example:&#xA;- If the ontology defines a term 'satisfies', an incoming relationship named 'satisfied-by' is reversed and the globalTitle is set to 'satisfies' and globalReversed is set to 'true'."
+          references="#//Relationship/globalReversed"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Enumeration" eSuperTypes="#//Element">
+    <eAnnotations source="A class defining a set of enumerated values for use by any set of instances, where each value has an id and a value, either multiLanguageText in case of datatype xs:string or a simple value for all other datatypes. &#xA;&#xA;A corresponding Link class must be defined with an enumeratedEndpoint to this enumeration class. An instance then has zero to many (0..n) aTargetLinks pointing to a value of the enumeration with hasTargetLink _(not yet shown in the model diagram - this design is somewhat cumbersome and needs review)_.  The required number of values is defined by minCount and maxCount of the Link class."
+        references="#//Enumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specializes" ordered="false"
+        eType="#//Enumeration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="datatype" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="A unit as defined by the International System of Units (SI). A unit can only be defined for a numeric datatype. By default the property has no unit."
+          references="#//Enumeration/datatype"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enumeratedValue" ordered="false"
+        upperBound="-1">
+      <eAnnotations source="A defined value of an [[Enumeration]]. &#xA;&#xA;Details:&#xA;- It must have the datatype specified by its parent.&#xA;- If the datatype is string, the value is a language string consisting of value and IETF language tag ('multiLangueText').&#xA;- Otherwise the value is a simple value.&#xA;- Values of all datatypes are represented as a string in all data formats, even JSON and JSON-LD."
+          references="#//Enumeration/enumeratedValue"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="aPackage" eSuperTypes="#//anEntity">
+    <eAnnotations source="A container for any selection of metamodel items. Standardized and addressable classes can be excluded from aPackage. Thus aPackage contains specific classes (from organization or project ontologies) plus the instances of interest.&#xA;&#xA;Details:&#xA;- The class of aPackage is formally Entity, but should be a subclass of Organizer (see [[CASCaRA Semantic Infrastructure]]).&#xA;- aPackage can be nested.&#xA;- Additional properties such as *license*, *contributor* or *import* nested packages are enumerated in the class of Package.&#xA;"
+        references="#//aPackage"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="context" ordered="false"
+        upperBound="-1">
+      <eAnnotations source="A list of IRIs per namespace abbreviation. Used as sequence of @prefix in RDF/Turtle, sequence of xmlns: in XML and @context in JSON-LD."
+          references="#//aPackage/context"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" ordered="false" upperBound="-1"
+        eType="#//Identifiable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" ordered="false" upperBound="-1"
+        eType="#//aPackage" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Configurable" abstract="true" eSuperTypes="#//Identifiable">
+    <eAnnotations source="Besides native properties such as title and description, [[Element]]s can have configurable properties and links. Those configurable properties and links support a dynamic data model, so that the ontology can evolve over time without software change. Sufficient detail such as data type and range can be provided to build dynamic forms, for example. It is in fact the core feature to separate CASCaRA syntax and semantics.&#xA;&#xA;Details:&#xA;- This class is abstract"
+        references="#//Configurable"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCount" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="An instance must have at least this number of properties of this class. Is '0' by default. This applies to both instances of a Property class and a Link class.&#xA;&#xA;For example, if a property class 'Priority' has a minCount=1 and a requirement class specifies an enumeratedProperty 'Priority', a requirement instance must have at least one property of class Priority (with a value). "
+          references="#//Configurable/minCount"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxCount" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="An instance must have at most this number of properties of this class. Is unbounded (infinite) by default. This applies to both instances of a Property class and a Link class.&#xA;&#xA;For example, if a property class 'Priority' has a maxCount=1 and a requirement class specifies an enumeratedProperty 'Priority', a requirement instance must have no more than one property of class Priority (with a value)."
+          references="#//Configurable/maxCount"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" ordered="false">
+      <eAnnotations source="Optional default value(s) in case a modelElement's property does not have an individual value when instantiated.  It may be changed later on, unless readOnly is set, and must follow the definitions of the Property (class) resp. Link (class) at all times, of course.&#xA;&#xA;Details:&#xA;- In case of Link, the value must be an identifier of Enumeration, Entity or Relationship.&#xA;- In case of Property, a value of any datatype may be asserted as specified.&#xA;- If the datatype is string, the value is a language string consisting of value and IETF language tag ('multiLangueText').&#xA;- Otherwise the value is a simple value.&#xA;- Values of all datatypes are represented as a string in all data formats, even JSON and JSON-LD."
+          references="#//Configurable/defaultValue"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="readOnly" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="The property value of an instance may not be updated or deleted, once assigned. &#xA;&#xA;If a defaultValue is specified, it is assigned when the property is instantiated and never modified. For example, this feature is needed to represent SysML v2 models, for example, where constant attributes can be assigned at class level.&#xA;"
+          references="#//Configurable/readOnly"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="globalTitle" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="The title assigned by matching the title with the terms of the ontology by the 'globalize' operation. "
+          references="#//Configurable/globalTitle"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+</ecore:EPackage>

@@ -5,12 +5,11 @@
 - namespace prefixes are defined in the context
 
 ### Referential Integrity
-- Property.id is different from any of the native properties defined for all item types
 - Property.hasClass is owl:DatatypeProperty (schema)
 - Property.specializes is a Property
 - Property.datatype is a valid xs: datatype
 - Property.maxLength is >0 and only specified, if datatype is xs:string
-- Property.pattern is a regular expression
+- Property.pattern is a regular expression and only specified, if datatype is xs:string
 - Property.minInclusive is only specified, if datatype is a xs: number datatype
 - Property.maxInclusive is only specified, if datatype is a xs: number datatype
 - Property.minInclusive is smaller or equal Property.maxInclusive
@@ -18,7 +17,6 @@
 - Property.defaultValue meets datatype and range
 - Property.composes entries are each pointing to a Property
 - Property.composes chain is a tree (without cyclic dependency)
-- Link.id is different from any of the native properties defined for all item types
 - Link.hasClass is owl:ObjectProperty (schema)
 - Link.specializes is a Link
 - Link.enumeratedEndpoint entries point to either 1 Enumeration, 1..n Entities or 1..n Relationships
@@ -30,11 +28,11 @@
 - Entity.hasClass is owl:Class (schema)
 - Entity.specializes is an Entity
 - Entity.enumeratedProperty entries are each pointing to a Property
-- Entity.enumeratedTargetLink entries are each pointing to a Link pointing either to 1 Enumeration, 1..n Entities or 1..n Relationships
+- Entity.enumeratedTargetLink entries are each pointing to a Link
 - Relationship.hasClass is owl:Class (schema)
 - Relationship.specializes is a Relationship
-- Relationship.enumeratedSourceLink has exactly one entry pointing to a Link pointing either to 1..n Entities or 1..n Relationships
-- Relationship.enumeratedTargetLink has exactly one entry pointing to a Link pointing either to 1..n Entities or 1..n Relationships
+- Relationship.enumeratedSourceLink has exactly one Link pointing either to 1..n Entities or 1..n Relationships
+- Relationship.enumeratedTargetLink has exactly one Link pointing either to 1..n Entities or 1..n Relationships
 - aProperty is contained in a parent aPackage, anEntity or aRelationship
 - aProperty.hasClass is a Property
 - aProperty.hasClass is contained in enumeratedProperty list of its parent's class (Enumeration, Entity or Relationship)
