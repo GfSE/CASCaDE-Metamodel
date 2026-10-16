@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="CASCaRA Metamodel">
-  <eAnnotations source="### Design goals&#xA;- **Separated syntax and semantics**: The metamodel governs the graph pattern independently of the ontology. Any software depends on the metamodel and doesn’t need change, when the ontology evolves over time.&#xA;- **Interoperability**: A graph pattern is designed which may be represented in RDF, JSON-LD, GQL and OOP alike. Bidirectional transformations between any of those formats shall be possible without data-loss. Admittedly this ‘sweet-spot’ reduces expressivity when compared with any of the listed data formats, but the choice of implementation technologies is maximized. Verification and validation will show that the expressivity of the CASCaRA Graph is sufficient for the purpose.&#xA;- **Federated data-spaces**: The general use of URIs (or UUIDs with namespace) as identifier like RDF allows linked data to reside in multiple internet servers and still form a valid graph which can be seamlessly traversed and queried.&#xA;- **Standard queries**: The same queries shall be applicable, no matter where the data came from originally.&#xA;"
+  <eAnnotations source="### Design goals&#xA;- **Separated syntax and semantics:** The metamodel governs the graph pattern independently of the ontology. Any software depends on the metamodel and doesn’t need change, when the ontology evolves over time.&#xA;- **Interoperability:** A graph pattern is designed which may be represented in RDF, JSON-LD, GQL and OOP alike. Bidirectional transformations between any of those formats shall be possible without data-loss. Admittedly this ‘sweet-spot’ reduces expressivity when compared with any of the listed data formats, but the choice of implementation technologies is maximized. Verification and validation will show that the expressivity of the CASCaRA Graph is sufficient for the purpose.&#xA;- **Federated data-spaces:** The general use of URIs (or UUIDs with namespace) as identifier like RDF allows linked data to reside in multiple internet servers and still form a valid graph which can be seamlessly traversed and queried.&#xA;- **Standard queries:** The same queries shall be applicable, no matter where the data came from originally.&#xA;"
       references="#/"/>
   <eClassifiers xsi:type="ecore:EClass" name="aProperty" eSuperTypes="#//Item">
     <eAnnotations source="Each property belongs to a single [[anEntity]], [[aRelationship]] or [[aPackage]]. A property has *no* identifier, thus a property update results in a new revision of the item to which it belongs. Is project data ('payload') having a clear meaning, datatype and range through its type [[Property]].&#xA;&#xA;Details:&#xA;- aProperty may be required or not depending on the attributes minCount and maxCount of its type, but an existing property must have a value.&#xA;- aProperty value can be mutated.&#xA;- aProperty value cannot be deleted, the whole aProperty must be deleted, if so desired.&#xA;- the value of aProperty must conform with the datatype, length, minInclusive, maxInclusive or pattern of its type [[Property]]. Not all restrictions apply for all datatypes.&#xA;- aProperty may be composed of multiple aProperties to form a structured data set according to its type.&#xA;"
@@ -11,7 +11,7 @@
       <eAnnotations references="#//aProperty/type"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false"
-        lowerBound="1" upperBound="-1">
+        lowerBound="1" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="The value of a [[aProperty]].&#xA;&#xA;Details:&#xA;- If the datatype of the property's type is string, the value is a language string consisting of value and IETF language tag ('multiLangueText'). If there is a value in only one language, the language tag is optional.&#xA;- Some convention is needed when a string is an expression - out of scope at present.&#xA;- Otherwise the value is a simple value.&#xA;- The rules of XML Schema apply, for example value compatibility: &quot;99&quot;^^xsd:integer  = &quot;99.0&quot;^^xsd:decimal."
           references="#//aProperty/value"/>
     </eStructuralFeatures>
@@ -99,7 +99,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="aTargetLink" eSuperTypes="#//aLink">
     <eAnnotations source="A link instance pointing to the target of a reified [[aRelationship]] or to one or more targets of [[anEntity]]. aTargetLink has *no* identifier, thus a property update results in a new revision of the item to which it belongs.&#xA;&#xA;From a semantic point of view, there is no need to make a distinction between aSourceLink and aTargetLink at the metamodel level. The distinction can be done and *is made* at ontology level in the [[CASCaRA Semantic Infrastructure]]. However it is much easier to check the pattern/schema/shape and to ingest data, if the itemType is explicit.&#xA;&#xA;Details:&#xA;- aTargetLink may be required or not depending on the attributes minCount and maxCount of its type [[Link]], but an existing one must have a value.&#xA;&#xA;Examples: &#xA;- A relationship 'worksFor' can relate one or multiple person instances to an organization instance (target) using [[aTargetLink]] named 'Employer'.&#xA;- An organizer (see [[CASCaRA Semantic Infrastructure]]) such as a chapter title (folder) in an outline can point to one or more contained items, be it anEntity, aRelationship or other.&#xA;- [[anEntity]], [[aRelationship]] or [[aPackage]] may point to an [[enumeratedValue]] of an [[Enumeration]]. The value must belong to an enumeration listed by [[enumeratedTargetLink]] of its type ."
         references="#//aTargetLink"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="hasEndpoint" ordered="false"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasValue" ordered="false"
         upperBound="-1" eType="#//enumeratedValue" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Entity" eSuperTypes="#//Element">
@@ -225,7 +225,7 @@
         references="#//aPackage"/>
     <eAnnotations references="#//aPackage"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="context" ordered="false"
-        upperBound="-1">
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="A list of IRIs per namespace abbreviation. Used as sequence of @prefix in RDF/Turtle, sequence of xmlns: in XML and @context in JSON-LD."
           references="#//aPackage/context"/>
     </eStructuralFeatures>
@@ -245,7 +245,8 @@
       <eAnnotations source="The maximum count of a 'configurable' defined by an [[Element]] type for its instances. Thus  [[anElement]] owning [[aProperty]] or [[aLink]] must have at most this number of occurrences. Is '0' by default.&#xA;&#xA;For example, if a property type 'Priority' has a maxCount=1 and a requirement type specifies an enumeratedProperty 'Priority', a requirement instance must have no more than one property of type Priority (with a value)."
           references="#//Configurable/maxCount"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" ordered="false">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="Optional default value(s) in case an Element's property does not have an individual value when instantiated.  It may be changed later on, unless readOnly is set, and must follow the definitions of the Property type resp. Link type at all times, of course.&#xA;&#xA;Details:&#xA;- In case of Link, the value must be an identifier of Enumeration, Entity or Relationship.&#xA;- In case of Property, a value of the datatype as specified must be asserted.&#xA;- If the datatype is string, the value is a language string consisting of value and IETF language tag ('multiLangueText').&#xA;- Otherwise the value is a simple value.&#xA;- Values of all datatypes are represented as a string in all data formats, even JSON and JSON-LD.&#xA;- In the reference implementation, there is no difference in the instance's value, whether taken from the defaultValue or assigned explicitly. If an explicit value is removed, the defaultValue shall be reassigned. &#xA;"
           references="#//Configurable/defaultValue"/>
     </eStructuralFeatures>
