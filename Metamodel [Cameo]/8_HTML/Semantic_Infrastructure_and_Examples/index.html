@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" crossorigin="anonymous"/>
+		<link rel="stylesheet" type="text/css" href="./Styles/styles.css"/>
+		<title>CASCaRA_Semantic_Infrastructure_and_Examples</title>
+	</head>
+	<body>
+		<div class="container max-width-lg">
+			<div class="row">
+				<div class="col-12">
+					<div class="title">CASCaRA_Semantic_Infrastructure_and_Examples</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12 col-md-3">
+					<h3 style="margin-top:2.4rem;">Content</h3>
+					<ul>
+						<li>
+							<a href="#N-8343921656">CASCaRA Semantic Infrastructure</a>
+						</li>
+						<li>
+							<a href="#N-10619467353">CASCaRA Examples</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-12 col-md-9">
+					<h1 id="N-8343921656">CASCaRA Semantic Infrastructure</h1>
+					<p>The CASCaRA Semantic Infrastructure complements the CASCaRA Metamodel by further sub-typing its items in the application domain. The idea is to keep the metamodel as simple as possible and add semantic precision through the semantic infrastructure.</p>
+					<p>Let&#39;s consider the paradigm of separating syntax and semantics with the objective to shield the software from an ontology under evolution over time. In all likelihood, the CASCaRA Semantic Infrastructure will be used by software for reasons of simplicity. Therefore it is advised to treat the semantic infrastructure similarly to the metamodel: Change it seldomly and keep it downward compatible. Thus, software built assuming an older version shall not break when a new version of the metamodel or semantic infrastructure is adopted. So the semantic infrastructure can be seen as an intermediary layer between metamodel and ontology.</p>
+					<p>Thus, an ontology for use with the CASCaRA Metamodel SHOULD sub-type the items of the CASCaRA Semantic Infrastructure.</p>
+					<h3 id="N-11473075187">CASCaRA Semantic Infrastructure Diagram</h3>
+					<p>The CASCaRA Semantic Infrastructure complements the CASCaRA Metamodel by further sub-typing its items in the application domain. The idea is to keep the metamodel as simple as possible and add semantic precision through the semantic infrastructure.</p>
+					<p>Let&#39;s consider the paradigm of separating syntax and semantics with the objective to shield the software from an ontology under evolution over time. In all likelihood, the CASCaRA Semantic Infrastructure will be used by software for reasons of simplicity. Therefore it is advised to treat the semantic infrastructure similarly to the metamodel: Change it seldomly and keep it downward compatible. Thus, software built assuming an older version shall not break when a new version of the metamodel or semantic infrastructure is adopted. So the semantic infrastructure can be seen as an intermediary layer between metamodel and ontology.</p>
+					<p>Thus, an ontology for use with the CASCaRA Metamodel SHOULD sub-type the items of the CASCaRA Semantic Infrastructure.</p>
+					<p>
+						<img src="./Images/F-973461415.png" style="max-width:100%" alt="CASCaRA_Semantic_Infrastructure_Diagram.png"/>
+					</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Diagram</td>
+							</tr>
+							<tr>
+								<td class="propertyTitle">Notation</td>
+								<td>UML Object Diagram</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-8343921656">CASCaRA Semantic Infrastructure</a>
+									<br/>
+								</td>
+								<td class="statementTitle">contains</td>
+								<td>CASCaRA Semantic Infrastructure Diagram</td>
+							</tr>
+						</tbody>
+					</table>
+					<h1 id="N-10619467353">CASCaRA Examples</h1>
+					<p>A simple, yet representative CASCaRA example is presented. This chapter describes it, whereas the data is listed in the four native CASCaRA formats (&#39;Magic Tetrahedron&#39;):</p>
+					<ul>
+						<li>CASCaRA TTL, see <a href="https://github.com/GfSE/CASCaDE-Verification-and-Validation/blob/main/Very-simple-Model-with-Requirements%20%5BFMC%20-%20SpecIF%5D/7_TTL/Very_Simple_Model_(FMC)_with_Requirements.cas.ttl">Very Simple Model with Requirements (TTL)</a>.</li>
+						<li>CASCaRA XML, see <a href="https://github.com/GfSE/CASCaDE-Verification-and-Validation/blob/main/Very-simple-Model-with-Requirements%20%5BFMC%20-%20SpecIF%5D/5_XML/Very_Simple_Model_(FMC)_with_Requirements.cas.xml">Very Simple Model with Requirements (XML)</a>.</li>
+						<li>CASCaRA JSON-LD, see <a href="https://github.com/GfSE/CASCaDE-Verification-and-Validation/blob/main/Very-simple-Model-with-Requirements%20%5BFMC%20-%20SpecIF%5D/6_JSONLD/Very_Simple_Model_(FMC)_with_Requirements.cas.jsonld">Very Simple Model with Requirements (JSON-LD)</a>.</li>
+						<li>CASCaRA Cypher, see <a href="https://github.com/GfSE/CASCaDE-Verification-and-Validation/blob/main/Very-simple-Model-with-Requirements%20%5BFMC%20-%20SpecIF%5D/4_Cypher/Very_Simple_Model_(FMC)_with_Requirements.cypher">Very Simple Model with Requirements (Cypher)</a>. As soon as implementations of GQL exist, the example will be provided in that format, as well.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Package</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>CASCaRA Examples</td>
+								<td class="statementTitle">contains</td>
+								<td>
+									<a href="#N-10180435794">Entities with Relationship</a>
+									<br/>
+									<a href="#N-10384651012">Folder lists Requirement</a>
+									<br/>
+									<a href="#N-11793527498">Requirement with configurable Property</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10384651012">Folder lists Requirement</h3>
+					<p>This example shows a requirement being listed in a document called &#39;System Spec&#39; with a folder named &#39;Requirements&#39; together with their types:</p>
+					<ul>
+						<li>At the upper right the actual package-root is seen. By convention, it serves as an anchor for all organizers of the package so that they can be found easily. That&#39;s needed as a graph as such has no beginning and no end.</li>
+						<li>It holds one or more document outlines of a package using a target link of type &#39;lists&#39;.</li>
+						<li>The document is represented by an entity of type &#39;Outline&#39;, which is a subtype of &#39;Entity&#39;.</li>
+						<li>It holds one or more folder subtrees again using a target link of type &#39;lists&#39;.</li>
+						<li>The folder is again represented by an entity of type &#39;Outline&#39;.</li>
+						<li>It holds one or more requirements again using a target link of type &#39;lists&#39;.</li>
+						<li>The requirement finally is represented by an entity of type &#39;Requirement&#39;, which is also a subtype of &#39;Entity&#39;.</li>
+						<li>The target link instances have no id, as they are <em>composed</em> in the parent object, i.e. prt-1, doc-1 and fld-1 respectively. If changed, the parent object as a whole gets a new revision.</li>
+						<li>To summarize: A Link is a direct graph edge between entities and relationships, which are graph vertices.</li>
+					</ul>
+					<p>Details:</p>
+					<ul>
+						<li>All items shown on the diagram are metamodel instances of the metamodel classes, so-called UML InstanceSpecifications.</li>
+						<li>The white items at the left border incarnate the metamodel items and are abstract, i.e. not intended for instantiation. In RDF/OWL they are the top owl:Class, so that the itemType of any specialization can be determined by SPARQL query.</li>
+						<li>All light purple items are CASCaRA (application) types defined more firmly by the semantic infrastructure or derived by an ontology. They are usually available online and there is no need to include them in a CASCaRA package. However, they can be included. These items are objects (instances), thus data, in the implementation domain expressed in UML.</li>
+						<li>The light blue items to the right are instances in the application domain or &#39;payload&#39; of a CASCaRA package. These items are also objects/instances in the implementation domain, thus data like their types.</li>
+						<li>All identifiable items of a package, both types and instances, are composed in its graph structure.</li>
+						<li>See the textual notation of all CASCaRA formats in the GitHub Repository <a href="https://github.com/GfSE/CASCaDE-Verification-and-Validation/tree/main/Very-simple-Model-with-Requirements%20%5BFMC%20-%20SpecIF%5D">&#39;CASCaDE Verification and Validation&#39;</a>.</li>
+					</ul>
+					<p>
+						<img src="./Images/F-1871139914.png" style="max-width:100%" alt="Folder_lists_Requirement.png"/>
+					</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Diagram</td>
+							</tr>
+							<tr>
+								<td class="propertyTitle">Notation</td>
+								<td>UML Object Diagram</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-10619467353">CASCaRA Examples</a>
+									<br/>
+								</td>
+								<td class="statementTitle">contains</td>
+								<td>Folder lists Requirement</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11793527498">Requirement with configurable Property</h3>
+					<p>This example shows an entity of type &#39;Requirement&#39; with one of potentially multiple configured properties:</p>
+					<ul>
+						<li>At the upper right the requirement instance is seen.</li>
+						<li>Like all entity and relationship instances, it has the <em>native</em> properties &#39;title&#39; and/or &#39;description&#39;. They are called &#39;native&#39;, because they are defined by the metamodel and don&#39;t need to be configured.</li>
+						<li>The requirement includes a configured property of type &#39;Stakeholder&#39; with the value of &#39;Customer&#39;.</li>
+						<li>The requirement&#39;s type &#39;Requirement&#39; must enumerate all configured properties with datatype and optionally domain restrictions, in this case a stakeholder as xs:string with maxLength=64.</li>
+						<li>The property type &#39;Stakeholder&#39; is said to be <em>configurable</em>, because it can be defined (enumerated) by zero to many entity or relationship types.</li>
+						<li>The property instance has no id, as it is <em>composed</em> in the parent object, i.e. req-1. If changed, the parent object as a whole gets a new revision.</li>
+					</ul>
+					<p>Details:</p>
+					<ul>
+						<li>All items shown on the diagram are metamodel instances of the metamodel classes, so-called UML InstanceSpecifications.</li>
+						<li>The white items at the left border incarnate the metamodel items and are abstract, i.e. not intended for instantiation. In RDF/OWL they are the top owl:Class, so that the itemType of any specialization can be determined by SPARQL query.</li>
+						<li>All light purple items are CASCaRA (application) types defined more firmly by the semantic infrastructure or derived by an ontology. They are usually available online and there is no need to include them in a CASCaRA package. However, they can be included. These items are objects (instances), thus data, in the implementation domain expressed in UML.</li>
+						<li>The light blue items to the right are instances in the application domain or &#39;payload&#39; of a CASCaRA package. These items are also objects/instances in the implementation domain, thus data like their types.</li>
+						<li>All identifiable items of a package, both types and instances, are composed in its graph structure.</li>
+						<li>See the textual notation of all CASCaRA formats in the GitHub Repository <a href="https://github.com/GfSE/CASCaDE-Verification-and-Validation/tree/main/Very-simple-Model-with-Requirements%20%5BFMC%20-%20SpecIF%5D">&#39;CASCaDE Verification and Validation&#39;</a>.</li>
+					</ul>
+					<p>
+						<img src="./Images/F-312877856.png" style="max-width:100%" alt="Requirement_with_configurable_Property.png"/>
+					</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Diagram</td>
+							</tr>
+							<tr>
+								<td class="propertyTitle">Notation</td>
+								<td>UML Object Diagram</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-10619467353">CASCaRA Examples</a>
+									<br/>
+								</td>
+								<td class="statementTitle">contains</td>
+								<td>Requirement with configurable Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10180435794">Entities with Relationship</h3>
+					<p>The example shows an entity &#39;FiCo Application&#39; with type &#39;Application Software&#39; which satisfies another entity &#39;Response Time&#39; with type &#39;Requirement&#39;:</p>
+					<ul>
+						<li>&#39;FiCo&#39; stands for &#39;Finance &#38;amp; Controlling&#39;.</li>
+						<li>The relationship instance of type &#39;satisfies&#39; (in the middle of the items shown next to the right border) is reified and has two links to the related entity instances. In general, also relationships can be linked by relationships on either side, so that &#39;statements on statements&#39; can be made.</li>
+						<li>The links have a named type for the source and the target side respectively.</li>
+						<li>Any of the links can have multiple endpoints, if the relationship is true for all of them. Usually a single satisfying entity (here &#39;FiCo Application&#39;) points to several satisfied entities (one of which is &#39;Response Time&#39;, here).</li>
+						<li>The source and target link instances have no id, as they are <em>composed</em> in the parent object, i.e. sat-1. If changed, the parent object as a whole gets a new revision.</li>
+					</ul>
+					<p>Details:</p>
+					<ul>
+						<li>All items shown on the diagram are metamodel instances of the metamodel classes, so-called UML InstanceSpecifications.</li>
+						<li>The white items at the left border incarnate the metamodel items and are abstract, i.e. not intended for instantiation. In RDF/OWL they are the top owl:Class, so that the itemType of any specialization can be determined by SPARQL query.</li>
+						<li>All light purple items are CASCaRA (application) types defined more firmly by the semantic infrastructure or derived by an ontology. They are usually available online and there is no need to include them in a CASCaRA package. However, they can be included. These items are objects (instances), thus data, in the implementation domain expressed in UML.</li>
+						<li>The light blue items to the right are instances in the application domain or &#39;payload&#39; of a CASCaRA package. These items are also objects/instances in the implementation domain, thus data like their types.</li>
+						<li>All identifiable items of a package, both types and instances, are composed in its graph structure.</li>
+						<li>See the textual notation of all CASCaRA formats in the GitHub Repository <a href="https://github.com/GfSE/CASCaDE-Verification-and-Validation/tree/main/Very-simple-Model-with-Requirements%20%5BFMC%20-%20SpecIF%5D">&#39;CASCaDE Verification and Validation&#39;</a>.</li>
+					</ul>
+					<p>
+						<img src="./Images/F-1917865045.png" style="max-width:100%" alt="Entities_with_Relationship.png"/>
+					</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Diagram</td>
+							</tr>
+							<tr>
+								<td class="propertyTitle">Notation</td>
+								<td>UML Object Diagram</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-10619467353">CASCaRA Examples</a>
+									<br/>
+								</td>
+								<td class="statementTitle">contains</td>
+								<td>Entities with Relationship</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

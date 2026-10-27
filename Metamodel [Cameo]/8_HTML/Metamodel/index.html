@@ -1,0 +1,4519 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" crossorigin="anonymous"/>
+		<link rel="stylesheet" type="text/css" href="./Styles/styles.css"/>
+		<title>Modell</title>
+	</head>
+	<body>
+		<div class="container max-width-lg">
+			<div class="row">
+				<div class="col-12">
+					<div class="title">Modell</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12 col-md-3">
+					<h3 style="margin-top:2.4rem;">Content</h3>
+					<ul>
+						<li>
+							<a href="#N-11247711314">CASCaRA_Metamodel</a>
+						</li>
+						<li>
+							<a href="#N-11195833697">CASCaRA_Schemata</a>
+						</li>
+						<li>
+							<a href="#N-FolderGlossary-10052302263">Model Elements (Glossary)</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-12 col-md-9">
+					<h1 id="N-11247711314">CASCaRA_Metamodel</h1>
+					<h2>Design goals</h2>
+					<ul>
+						<li>
+							<strong>Separated syntax and semantics:</strong> The metamodel governs the graph pattern independently of the ontology. Any software depends on the metamodel and doesn’t need change, when the ontology evolves over time.</li>
+						<li>
+							<strong>Interoperability:</strong> A graph pattern is designed which may be represented in RDF, JSON-LD, GQL and OOP alike. Bidirectional transformations between any of those formats shall be possible without data-loss. Admittedly this ‘sweet-spot’ reduces expressivity when compared with any of the listed data formats, but the choice of implementation technologies is maximized. Verification and validation will show that the expressivity of the CASCaRA Graph is sufficient for the purpose.</li>
+						<li>
+							<strong>Federated data-spaces:</strong> The general use of URIs (or UUIDs with namespace) as identifier like RDF allows linked data to reside in multiple internet servers and still form a valid graph which can be seamlessly traversed and queried.</li>
+						<li>
+							<strong>Standard queries:</strong> The same queries shall be applicable, no matter where the data came from originally.</li>
+					</ul>
+					<h3 id="N-9134739822">CASCaRA_Metamodel_Diagram</h3>
+					<p>The CASCaRA metamodel is a &#39;platform independent model&#39; (PIM) in OMG terms and defines both the CADSCaRA types (above the dashed line) and the CASCaRA instances (below the dashed line), forming the CASCaRA Product Information Graph in the application domain. CASCaRA types are owl:Class, owl:DatatypeProperty or owl:ObjectProperty. Identifiable CASCaRA instances are owl:NamedIndividual.  In the specification/ implementation domain, both CASCaRA types and instances are application data which are modeled as UML classes:</p>
+					<ul>
+						<li>
+							<a href="#N-10961011573">Entity</a> and <a href="#N-8999785981">anEntity</a> are type and instance used for model elements, such as a requirement, a function or a system component.</li>
+						<li>
+							<a href="#N-11858764785">Relationship</a> and <a href="#N-12014588218">aRelationship</a> are type and instance used for relations between elements, such as a &#39;component satisfies a requirement&#39;. A Relationship type may define a set of <a href="#N-10961011573">Entity</a> or <a href="#N-11858764785">Relationship</a> types, whose instances are eligible as source or target of aRelationship instance which is thus always directed.</li>
+						<li>Employing enumeratedProperty, every <a href="#N-10961011573">Entity</a> and <a href="#N-11858764785">Relationship</a> can define a set of <a href="#N-10592233906">Property</a>, each of which specifies a datatype and range. For example, a requirement might have two &#39;native&#39; properties „title“ and „description“ plus two configurable properties such as &quot;Category&quot; with datatype xs:string and a maximum length of 32 and „Priority“ with a single value of the <a href="#N-10837991683">Enumeration</a> [&#39;high&#39;, &#39;medium&#39;, &#39;low&#39;]“.</li>
+						<li>A datatype may be any of those known from XML. As described above, some parameters of <a href="#N-10592233906">Property</a> may restrict the value range, such as minimum and/or maximum value of a  number, a string length or a set of enumerated values is defined by an <a href="#N-10837991683">Enumeration</a>.</li>
+						<li>
+							<a href="#N-8999785981">anEntity</a> or <a href="#N-12014588218">aRelationship</a> is thus an instance of <a href="#N-10961011573">Entity</a> or <a href="#N-11858764785">Relationship</a> respectively. Each instance usually has a set of <a href="#N-10857127627">aProperty</a> corresponding with the <a href="#N-10592233906">Property</a> of its type.</li>
+						<li>
+							<a href="#N-11365391228">aPackage</a> is an instance of <a href="#N-10961011573">Entity</a> and contains a subgraph of the global CASCaRA Graph. <a href="#N-11365391228">aPackage</a> may have a set of <a href="#N-10857127627">aProperty</a> corresponding with the <a href="#N-10592233906">Property</a> of its type. Finally, aPackage can be nested.</li>
+					</ul><h3>Note</h3><ul>
+						<li>&quot;Technical&quot; super-class and sub-class in the UML sense are defined in this metamodel by means of UML:Generalization.</li>
+						<li>&quot;Semantic&quot; super-type and sub-type representing types of real world instances are specified by the UML associations with an end &#39;specializes&#39;.</li>
+						<li>As usual, the UML classes with white background and italic name are abstract.</li>
+					</ul><h2>Constraints</h2><p>All constraints must be satisfied in addition to the JSON-LD schemata, XML schemata or RDF shapes.</p><h3>General</h3><ul>
+						<li>IDs are unique</li>
+					</ul><h3>Model Integrity</h3><ul>
+						<li>Property.type is owl:DatatypeProperty</li>
+						<li>Property.specializes is a Property</li>
+						<li>Property.datatype is a valid xs: datatype</li>
+						<li>Property.maxLength is &#38;gt;0 and only specified, if datatype is xs:string</li>
+						<li>Property.pattern is a regular expression and only specified, if datatype is xs:string</li>
+						<li>Property.minInclusive is only specified, if datatype is a number</li>
+						<li>Property.maxInclusive is only specified, if datatype is a number</li>
+						<li>Property.minInclusive is smaller or equal Property.maxInclusive</li>
+						<li>Property datatype and range must be a super-set of those defined in the specialized Property (following the restrictions of OWL)</li>
+						<li>Property.defaultValue meets datatype and range</li>
+						<li>Property.composes entries are each pointing to a Property</li>
+						<li>Property.composes chain is a tree (without cyclic dependency)</li>
+						<li>Link.type is owl:ObjectProperty</li>
+						<li>Link.specializes is a Link</li>
+						<li>Link.enumeratedEndpoint entries point to either 1 Enumeration, 1..n Entities <em>or</em> 1..n Relationships</li>
+						<li>Link.defaultValue is a valid Id-string (URI or UUID with namespace)</li>
+						<li>Link.enumeratedEndpoints must be a super-set of those defined in the specialized Link (following the restrictions of OWL)</li>
+						<li>Enumeration.type is owl:Class</li>
+						<li>Enumeration.specializes is an Enumeration</li>
+						<li>Enumeration.enumeratedValue complies with the datatype</li>
+						<li>Entity.type is owl:Class</li>
+						<li>Entity.specializes is an Entity</li>
+						<li>Entity.enumeratedProperty entries are each pointing to a Property</li>
+						<li>Entity.enumeratedTargetLink entries are each pointing to a Link</li>
+						<li>Entity.enumeratedProperty and Entity.enumeratedTargetLink entries are super-sets of those defined in the specialized Entity.</li>
+						<li>Relationship.type is owl:Class</li>
+						<li>Relationship.specializes is a Relationship</li>
+						<li>Relationship.enumeratedProperty entries are each pointing to a Property</li>
+						<li>Relationship.enumeratedSourceLink has exactly one entry pointing to a Link</li>
+						<li>Relationship.enumeratedTargetLink has exactly one entry pointing to a Link</li>
+						<li>Relationship.enumeratedProperty, Relationship.enumeratedSourceLink and Relationship.enumeratedTargetLink entries are super-sets of those defined in the specialized Relationship.</li>
+						<li>aProperty is contained in a parent aPackage, anEntity or aRelationship</li>
+						<li>aProperty.type is a Property</li>
+						<li>aProperty.type is contained in enumeratedProperty list of its parent&#39;s type (Entity or Relationship)</li>
+						<li>aProperty minCount and maxCount are met, language-aware in case of xs:string</li>
+						<li>aProperty.value is a multilanguage object in case of xs:string, where the language tag is set if more than 1 language is provided</li>
+						<li>aProperty.value is a simple value (literal) in case the datatype is other than xs:string</li>
+						<li>aProperty.value meets the datatype of its type</li>
+						<li>aProperty.composes entries are aProperty</li>
+						<li>aSourceLink is contained in a parent aRelationship</li>
+						<li>aSourceLink.type is a Link</li>
+						<li>aSourceLink.type is contained in the enumeratedSourceLink list of its parent&#39;s type (Relationship)</li>
+						<li>aSourceLink.hasEndpoint (idRef) points to an instance of an entry listed as enumeratedSourceLink of its type (Link).</li>
+						<li>aTargetLink is contained in a parent aPackage, anEntity or aRelationship</li>
+						<li>aTargetLink.type is a Link</li>
+						<li>aTargetLink.type is contained in enumeratedTargetLink list of its parent&#39;s type (Entity or Relationship)</li>
+						<li>aTargetLink.hasEndpoint (idRef) points either to an instance of an entry listed as enumeratedTargetLink of its type (Link) or to an enumeratedValue of the listed Enumeration</li>
+						<li>aPackage.type is an Entity</li>
+						<li>aPackage.context defines all namespace prefixes used in its (sub-) graph</li>
+						<li>anEntity.type is an Entity</li>
+						<li>aRelationship.type is a Relationship</li>
+						<li>A specializes chain is a tree (without cyclic dependency)</li>
+					</ul>
+					<h2>Limitations</h2><ul>
+						<li>Enumerations cannot be contained in a composed Property</li>
+						<li>Links cannot be contained in a composed Property</li>
+						<li>all enumeratedEndpoints of a given Link must be of the same item type (Enumeration, Entity or Relationship)</li>
+						<li>Access Permissions per user role are still missing. Role names and the way how to assign permissions per metamodel item shall be included in the standard, whereas the assignment of users to user roles is left to the implementations.</li>
+					</ul>
+					<p>
+						<img src="./Images/F--289992817.png" style="max-width:100%" alt="CASCaRA_Metamodel_Diagram.png"/>
+					</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Diagram</td>
+							</tr>
+							<tr>
+								<td class="propertyTitle">Notation</td>
+								<td>UML Class Diagram</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>CASCaRA_Metamodel_Diagram</td>
+								<td class="statementTitle">shows</td>
+								<td>
+									<a href="#N-8776684673">aLink</a>
+									<br/>
+									<a href="#N-11107558280">anElement</a>
+									<br/>
+									<a href="#N-8999785981">anEntity</a>
+									<br/>
+									<a href="#N-11365391228">aPackage</a>
+									<br/>
+									<a href="#N-10857127627">aProperty</a>
+									<br/>
+									<a href="#N-12014588218">aRelationship</a>
+									<br/>
+									<a href="#N-8157368569">aSourceLink</a>
+									<br/>
+									<a href="#N-10761038327">aTargetLink</a>
+									<br/>
+									<a href="#N-10469415172">color</a>
+									<br/>
+									<a href="#N-11784662253">Configurable</a>
+									<br/>
+									<a href="#N-8616907065">context</a>
+									<br/>
+									<a href="#N-8846296661">creator</a>
+									<br/>
+									<a href="#N-12118809206">datatype</a>
+									<br/>
+									<a href="#N-10437796008">defaultValue</a>
+									<br/>
+									<a href="#N-8756476138">definition</a>
+									<br/>
+									<a href="#N-8760453068">description</a>
+									<br/>
+									<a href="#N-8520877630">Element</a>
+									<br/>
+									<a href="#N-10961011573">Entity</a>
+									<br/>
+									<a href="#N-10837991683">Enumeration</a>
+									<br/>
+									<a href="#N-9144562788">globalReversed</a>
+									<br/>
+									<a href="#N-9761053016">globalTitle</a>
+									<br/>
+									<a href="#N-11182494579">icon</a>
+									<br/>
+									<a href="#N-8848978542">id</a>
+									<br/>
+									<a href="#N-11632284178">Identifiable</a>
+									<br/>
+									<a href="#N-9239676613">Item</a>
+									<br/>
+									<a href="#N-10213214561">itemType</a>
+									<br/>
+									<a href="#N-9990131015">Link</a>
+									<br/>
+									<a href="#N-8585607007">maxCount</a>
+									<br/>
+									<a href="#N-9252281528">maxInclusive</a>
+									<br/>
+									<a href="#N-11666167787">maxLength</a>
+									<br/>
+									<a href="#N-8063942153">minCount</a>
+									<br/>
+									<a href="#N-8148388355">minInclusive</a>
+									<br/>
+									<a href="#N-11292181894">modified</a>
+									<br/>
+									<a href="#N-11452891983">pattern</a>
+									<br/>
+									<a href="#N-8945329143">priorRevision</a>
+									<br/>
+									<a href="#N-10592233906">Property</a>
+									<br/>
+									<a href="#N-11574712960">readOnly</a>
+									<br/>
+									<a href="#N-11858764785">Relationship</a>
+									<br/>
+									<a href="#N-8660305830">revision</a>
+									<br/>
+									<a href="#N-8465100120">revisionAware</a>
+									<br/>
+									<a href="#N-10379162511">title</a>
+									<br/>
+									<a href="#N-11455159608">Value</a>
+									<br/>
+									<a href="#N-11026861278">value</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-9674998090">aProperty</h3>
+					<p>Each property belongs to a single <a href="#N-8548475260">anEntity</a>, <a href="#N-8479490873">aRelationship</a> or <a href="#N-11465515319">aPackage</a>. A property has <em>no</em> identifier, thus a property update results in a new revision of the item to which it belongs. Is project data (&#39;payload&#39;) having a clear meaning, datatype and range through its type <a href="#N-11952730605">Property</a>.</p>
+					<p>Details:</p>
+					<ul>
+						<li>aProperty may be required or not depending on the attributes minCount and maxCount of its type, but an existing property must have a value.</li>
+						<li>aProperty value can be mutated.</li>
+						<li>aProperty value cannot be deleted, the whole aProperty must be deleted, if so desired.</li>
+						<li>the value of aProperty must conform with the datatype, length, minInclusive, maxInclusive or pattern of its type <a href="#N-11952730605">Property</a>. Not all restrictions apply for all datatypes.</li>
+						<li>aProperty may be composed of multiple aProperties to form a structured data set according to its type.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>aProperty</td>
+								<td class="statementTitle">composes</td>
+								<td>
+									<a href="#N-9674998090">aProperty</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>aProperty</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-10559590179">value</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-11103104135">anElement</a>
+									<br/>
+								</td>
+								<td class="statementTitle">hasProperty</td>
+								<td>aProperty</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>aProperty</td>
+							</tr>
+							<tr>
+								<td>aProperty</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-8168456576">Item</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>aProperty</td>
+								<td class="statementTitle">type</td>
+								<td>
+									<a href="#N-11952730605">Property</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10559590179">value</h3>
+					<p>The value of <a href="#N-10857127627">aProperty</a>.</p>
+					<p>Details:</p>
+					<ul>
+						<li>If the datatype of the property&#39;s type is string, the value is a language string consisting of value and IETF language tag (&#39;multiLangueText&#39;). If there is a value in only one language, the language tag is optional.</li>
+						<li>Some convention is needed when a string is an expression - out of scope at present.</li>
+						<li>Otherwise the value is a simple value.</li>
+						<li>The rules of XML Schema apply, for example value compatibility: &quot;99&quot;^^xsd:integer  = &quot;99.0&quot;^^xsd:decimal.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-10857127627">aProperty</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>value</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>value</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8328005044">aSourceLink</h3>
+					<p>A link instance serving as source for a reified <a href="#N-12014588218">aRelationship</a>. aSourceLink has <em>no</em> identifier, thus a property update results in a new revision of the item to which it belongs.</p>
+					<p>From a semantic point of view, there is no need to make a distinction between aSourceLink and aTargetLink at the metamodel level. The distinction can be done and <em>is made</em> at ontology level in the <a href="https://product-information-graph.org/doc/semantic_infrastructure">CASCaRA Semantic Infrastructure</a>. However it is much easier to check the pattern/schema/shape and to ingest data, if the itemType makes the distinction.</p>
+					<p>Details:</p>
+					<ul>
+						<li>aSourceLink may be required or not depending on the attributes minCount and maxCount of its type, but an existing one must have a value.</li>
+					</ul>
+					<p>Example:</p>
+					<ul>
+						<li>A relationship &#39;worksFor&#39; can relate an organization instance (target) to one or multiple person instances using <a href="#N-8157368569">aSourceLink</a> named &#39;Employee&#39;.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-12014588218">aRelationship</a>
+									<br/>
+								</td>
+								<td class="statementTitle">hasSourceLink</td>
+								<td>aSourceLink</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>aSourceLink</td>
+							</tr>
+							<tr>
+								<td>aSourceLink</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-8776684673">aLink</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11476472525">Identifiable</h3>
+					<p>All sub-classes of this class (in UML terms) are identifiable, means they have an identifier, a title (name) and optionally a description.</p>
+					<p>Details:</p>
+					<ul>
+						<li>The class is abstract.</li>
+						<li>All attributes are inherited by its subclasses.</li>
+						<li>All type level items in the upper part of the diagram are commonly released and made available with an URL path including the revision. Hence, multiple revisions of a type set may exist in parallel.</li>
+						<li>All instance level items in the lower part of the diagram may be updated individually with change information <em>modified</em>, <em>revision</em>, <em>priorRevision</em> and <em>creator</em>. The prior revision identifier is memorized to support change history and branching. In case of a merge, there are two prior revisions.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11365391228">aPackage</a>
+									<br/>
+								</td>
+								<td class="statementTitle">graph</td>
+								<td>Identifiable</td>
+							</tr>
+							<tr>
+								<td>Identifiable</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-8846296661">creator</a>
+									<br/>
+									<a href="#N-8760453068">description</a>
+									<br/>
+									<a href="#N-8848978542">id</a>
+									<br/>
+									<a href="#N-11292181894">modified</a>
+									<br/>
+									<a href="#N-8945329143">priorRevision</a>
+									<br/>
+									<a href="#N-8660305830">revision</a>
+									<br/>
+									<a href="#N-10379162511">title</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Identifiable</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-11107558280">anElement</a>
+									<br/>
+									<a href="#N-11784662253">Configurable</a>
+									<br/>
+									<a href="#N-8520877630">Element</a>
+									<br/>
+								</td>
+								<td class="statementTitle">specializes</td>
+								<td>Identifiable</td>
+							</tr>
+							<tr>
+								<td>Identifiable</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-9239676613">Item</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-12047237818">id</h3>
+					<p>A globally unique identifier, either a fully qualified URI or a name with namespace standing for an URI, see <a href="#N-11365391228">aPackage</a>
+						<a href="#N-8616907065">context</a>.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11632284178">Identifiable</a>
+									<br/>
+									<a href="#N-11455159608">Value</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>id</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>id</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10558028891">title</h3>
+					<p>A multiLanguageText. Maps to dcterms:title or rdf:label.</p>
+					<p>Details:</p>
+					<ul>
+						<li>Here a multiplicity [0..1] is given, but in fact that depends on the itemType.</li>
+						<li>For all classes (Enumeration, Property, Link, Entity and Relationship), a title is mandatory.</li>
+						<li>In case of anEntity at least one of title or description is required, because it must be possible to represent a text paragraph as anEntity, which simply does not have a title.</li>
+						<li>In case of aRelationship both title and description are optional. If missing the title and/or description of the respective Relationship class applies. This avoids lots of repetition in real-world data-sets.</li>
+						<li>The same applies for aProperty, aSourceLink and aTargetLink; both title and description are optional.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11476472525">Identifiable</a>
+									<br/>
+									<a href="#N-8598184179">Value</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>title</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>title</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8741508888">description</h3>
+					<p>A multiLanguageText.  Maps to dcterms:description.</p>
+					<p>Details:</p>
+					<ul>
+						<li>Here a multiplicity [0..1] is given, but in fact that depends on the itemType.</li>
+						<li>For all types (Enumeration, Property, Link, Entity and Relationship), a title is mandatory.</li>
+						<li>In case of anEntity at least one of title or description is required, because it must be possible to represent a text paragraph as anEntity, which simply does not have a title.</li>
+						<li>In case of aRelationship both title and description are optional. If missing the title and/or description of the respective Relationship type applies. This avoids lots of repetition in real-world data-sets.</li>
+						<li>The same applies for aProperty, aSourceLink and aTargetLink; both title and description are optional.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11632284178">Identifiable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>description</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>description</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11815870930">modified</h3>
+					<p>A ISO-8601 DateTime value recording the point in time of the last change.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11632284178">Identifiable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>modified</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>modified</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10319024244">revision</h3>
+					<p>A unique string identifying the revision of the entity or relationship instance.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11476472525">Identifiable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>revision</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>revision</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11966229765">priorRevision</h3>
+					<p>Links to the previous revisions of an entity or relationship instance. It is a list with</p>
+					<ul>
+						<li>zero elements, if it is the first revision,</li>
+						<li>one element for a subsequent revision or</li>
+						<li>two elements when two branches are merged.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11632284178">Identifiable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>priorRevision</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>priorRevision</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11624866337">creator</h3>
+					<p>The person committing the last change. Is often an e-mail address.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11632284178">Identifiable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>creator</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>creator</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-9352780349">Element</h3>
+					<p>A super-class (in UML terms) of <a href="#N-8853048052">Entity</a> (type of entities) and <a href="#N-9878023212">Relationship</a> (type of relationships).</p>
+					<p>Details:</p>
+					<ul>
+						<li>The class is abstract.</li>
+						<li>All attributes and associations are inherited by its sub-classes Entity and Relationship.</li>
+						<li>The globalTitle of the Elements is used to integrate the instances of a partial graphs to an overarching CASCaRA graph.</li>
+						<li>Best practice is to release a set of CASCaRA types (thus all sub-classes of Element) from time to time as a whole. The version id is included in the directory path, so that multiple releases can be hosted in parallel.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-8717293826">Link</a>
+									<br/>
+								</td>
+								<td class="statementTitle">enumeratedEndpoint</td>
+								<td>Element</td>
+							</tr>
+							<tr>
+								<td>Element</td>
+								<td class="statementTitle">enumeratedProperty</td>
+								<td>
+									<a href="#N-11952730605">Property</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>Element</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-11240192038">color</a>
+									<br/>
+									<a href="#N-7957003020">definition</a>
+									<br/>
+									<a href="#N-10543710842">globalTitle</a>
+									<br/>
+									<a href="#N-10252149099">icon</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Element</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-8853048052">Entity</a>
+									<br/>
+									<a href="#N-11939889726">Enumeration</a>
+									<br/>
+									<a href="#N-9878023212">Relationship</a>
+									<br/>
+								</td>
+								<td class="statementTitle">specializes</td>
+								<td>Element</td>
+							</tr>
+							<tr>
+								<td>Element</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-11476472525">Identifiable</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-7957003020">definition</h3>
+					<p>A multiLanguageText mandatory for all types. Maps to skos:definition.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-8520877630">Element</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>definition</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>definition</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10252149099">icon</h3>
+					<p>An icon defined with a type can be used to decorate the instances.</p>
+					<p>Example:</p>
+					<ul>
+						<li>Folders as sub-type of Organizer and thus Entity may specify a UTF-8 character 🗀 for use by folders grouping certain model-elements.</li>
+						<li>A data-URL is also permitted as an icon.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-9352780349">Element</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>icon</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>icon</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11240192038">color</h3>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-8520877630">Element</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>color</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>color</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10543710842">globalTitle</h3>
+					<p>The title assigned by matching the title with the terms of the ontology by the &#39;globalize&#39; operation.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11784662253">Configurable</a>
+									<br/>
+									<a href="#N-8520877630">Element</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>globalTitle</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>globalTitle</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8717293826">Link</h3>
+					<p>Is an identifiable link type. It is used as a named connector between a reified <a href="#N-11858764785">Relationship</a> and its source and target, or as a named connector between an <a href="#N-10961011573">Entity</a> and a directly related target. A Link is an owl:ObjectProperty.</p>
+					<p>Details:</p>
+					<ul>
+						<li>A link type can be specialized by another. For example the most global &#39;linksTarget&#39; may be specialized by &#39;depicts&#39;.</li>
+						<li>If <em>revisionAware</em> is set for a Link, each endpoint of its instances is deleted as soon as the referenced endpoint itself is updated.</li>
+					</ul>
+					<p>Examples:</p>
+					<ul>
+						<li>An Organizer (semantic sub-type of <a href="#N-10961011573">Entity</a>) may list Requirements (another semantic sub-type of Entity) to construct a document outline. As such the Link type <em>lists</em> is specified as enumeratedTargetLink by Organizer.</li>
+						<li>An <a href="#N-10961011573">Entity</a> Requirement might have a property with enumerated values [&#39;high&#39;, &#39;medium&#39; or &#39;low&#39;]. This is represented by a Link type pointing to an <a href="#N-10837991683">Enumeration</a> defining those values.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>Link</td>
+								<td class="statementTitle">enumeratedEndpoint</td>
+								<td>
+									<a href="#N-8520877630">Element</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-11858764785">Relationship</a>
+									<br/>
+								</td>
+								<td class="statementTitle">enumeratedSourceLink</td>
+								<td>Link</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-10961011573">Entity</a>
+									<br/>
+									<a href="#N-11858764785">Relationship</a>
+									<br/>
+								</td>
+								<td class="statementTitle">enumeratedTargetLink</td>
+								<td>Link</td>
+							</tr>
+							<tr>
+								<td>Link</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-8465100120">revisionAware</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Link</td>
+							</tr>
+							<tr>
+								<td>Link</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-11784662253">Configurable</a>
+									<br/>
+									<a href="#N-9990131015">Link</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-8776684673">aLink</a>
+									<br/>
+								</td>
+								<td class="statementTitle">type</td>
+								<td>Link</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10393252113">revisionAware</h3>
+					<p>Indicates whether an instance of this type is valid for a <em>specific</em> or <em>any</em> revision of the specified endpoints.</p>
+					<p>Details:</p>
+					<ul>
+						<li>If <em>revisionAware</em> is set, all references occurring as endpoint of its instances are deleted as soon as the endpoint itself is updated; otherwise they are preserved.</li>
+						<li>In rare cases only one of a <a href="#N-11858764785">Relationship</a>&#39;s <em>enumeratedSourceLink</em> or <em>enumeratedTargetLink</em> can be &#39;revisionAware&#39;.</li>
+					</ul>
+					<p>Examples:</p>
+					<ul>
+						<li>
+							<a href="#N-8776684673">aLink</a> named <em>lists</em> of an outline (folder) shall continue to reference an endpoint, even if updated. So <em>revisionAware</em> of its <a href="#N-9990131015">Link</a> type is omitted or set to &#39;false&#39;.</li>
+						<li>
+							<a href="#N-12014588218">aRelationship</a> named <em>verifies</em> shall apply between specific revisions of a <em>test-case</em> and a <em>requirement</em>. So the types of both <a href="#N-8157368569">aSourceLink</a> and <a href="#N-10761038327">aTargetLink</a> set <em>revisionAware</em> to &#39;true&#39;. If the <em>requirement</em> is updated, it has no more <em>verifies</em> relationship, until explicitly set after repeating the <em>test-case</em>.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-9990131015">Link</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>revisionAware</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>revisionAware</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8146322038">aTargetLink</h3>
+					<p>A link instance pointing to the target of a reified <a href="#N-12014588218">aRelationship</a> or to one or more targets of <a href="#N-8999785981">anEntity</a>. aTargetLink has <em>no</em> identifier, thus a property update results in a new revision of the item to which it belongs.</p>
+					<p>From a semantic point of view, there is no need to make a distinction between aSourceLink and aTargetLink at the metamodel level. The distinction can be done and <em>is made</em> at ontology level in the <a href="https://product-information-graph.org/doc/semantic_infrastructure">CASCaRA Semantic Infrastructure</a>. However it is much easier to check the pattern/schema/shape and to ingest data, if the itemType is explicit.</p>
+					<p>Details:</p>
+					<ul>
+						<li>aTargetLink may be required or not depending on the attributes minCount and maxCount of its type <a href="#N-9990131015">Link</a>, but an existing one must have a value.</li>
+					</ul>
+					<p>Examples:</p>
+					<ul>
+						<li>A relationship &#39;worksFor&#39; can relate one or multiple person instances to an organization instance (target) using <a href="#N-10761038327">aTargetLink</a> named &#39;Employer&#39;.</li>
+						<li>An organizer (see <a href="https://product-information-graph.org/doc/semantic_infrastructure">CASCaRA Semantic Infrastructure</a>) such as a chapter title (folder) in an outline can point to one or more contained items, be it anEntity, aRelationship or other.</li>
+						<li>
+							<a href="#N-8999785981">anEntity</a>, <a href="#N-12014588218">aRelationship</a> or <a href="#N-11365391228">aPackage</a> may point to an enumerated <a href="#N-11455159608">Value</a> of an <a href="#N-10837991683">Enumeration</a>. The value must belong to an enumeration listed by <em>enumeratedTargetLink</em> of its type .</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-8999785981">anEntity</a>
+									<br/>
+									<a href="#N-12014588218">aRelationship</a>
+									<br/>
+								</td>
+								<td class="statementTitle">hasTargetLink</td>
+								<td>aTargetLink</td>
+							</tr>
+							<tr>
+								<td>aTargetLink</td>
+								<td class="statementTitle">hasValue</td>
+								<td>
+									<a href="#N-11455159608">Value</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>aTargetLink</td>
+							</tr>
+							<tr>
+								<td>aTargetLink</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-8776684673">aLink</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8853048052">Entity</h3>
+					<p>Entity is a type of model elements, such as a system component or a requirement. An Entity is an owl:Class.</p>
+					<p>Details:</p>
+					<ul>
+						<li>Entity should have a title (name) and may have a description (definition).</li>
+						<li>Entity may specify (configure) zero to many types of properties its instances may have.</li>
+						<li>The definitions of the entity together with those of the properties may be used to build user dialogs with input verification as well as to check its instances whether all property values have a correct type and value range as well as whether all required ones are present.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>Entity</td>
+								<td class="statementTitle">enumeratedTargetLink</td>
+								<td>
+									<a href="#N-8717293826">Link</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Entity</td>
+							</tr>
+							<tr>
+								<td>Entity</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-9352780349">Element</a>
+									<br/>
+									<a href="#N-8853048052">Entity</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-8548475260">anEntity</a>
+									<br/>
+								</td>
+								<td class="statementTitle">type</td>
+								<td>Entity</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8548475260">anEntity</h3>
+					<p>Is used for instances of model-elements such as a system component or a requirement. Is project data (&#39;payload&#39;) having a clear meaning through its type <a href="#N-10961011573">Entity</a>.</p>
+					<p>Details:</p>
+					<ul>
+						<li>anEntity must have either a title or a description - or both. This allows to compose documents including text paragraphs without title.</li>
+						<li>anEntity&#39;s type enumerates the types of <a href="#N-10857127627">aProperty</a> it may have.</li>
+						<li>anEntity&#39;s type also enumerates the types of <a href="#N-10761038327">aTargetLink</a> it may have.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>anEntity</td>
+								<td class="statementTitle">hasTargetLink</td>
+								<td>
+									<a href="#N-10761038327">aTargetLink</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>anEntity</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-11365391228">aPackage</a>
+									<br/>
+								</td>
+								<td class="statementTitle">specializes</td>
+								<td>anEntity</td>
+							</tr>
+							<tr>
+								<td>anEntity</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-11107558280">anElement</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>anEntity</td>
+								<td class="statementTitle">type</td>
+								<td>
+									<a href="#N-10961011573">Entity</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8479490873">aRelationship</h3>
+					<p>Is used for relations between entities, such as a &#39;system component satisfies a requirement&#39;. All relationships are bilateral and directed. Is project data (&#39;payload&#39;) having a clear meaning through its type <a href="#N-11858764785">Relationship</a>.</p>
+					<p>Details:</p>
+					<ul>
+						<li>This is a reified graph edge and must have exactly one <a href="#N-8157368569">aSourceLink</a> and <a href="#N-10761038327">aTargetLink</a> each.</li>
+						<li>aRelationship is deleted, if either its aSourceLink or its aTargetsLink is deleted.</li>
+						<li>Its aSourceLink and its aTargetLink must have a type listed as <em>enumeratedSourceLink</em> resp. <em>enumeratedTargetLink</em> by its type <a href="#N-11858764785">Relationship</a>.</li>
+						<li>Similarly, its type enumerates the types of <a href="#N-10857127627">aProperty</a> it may have.</li>
+						<li>Even though aRelationship may have an individual title, it is advised to omit it and assume its type&#39;s title to assure that relationships of the same type are named equally.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>aRelationship</td>
+								<td class="statementTitle">hasSourceLink</td>
+								<td>
+									<a href="#N-8157368569">aSourceLink</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>aRelationship</td>
+								<td class="statementTitle">hasTargetLink</td>
+								<td>
+									<a href="#N-10761038327">aTargetLink</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>aRelationship</td>
+							</tr>
+							<tr>
+								<td>aRelationship</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-11107558280">anElement</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>aRelationship</td>
+								<td class="statementTitle">type</td>
+								<td>
+									<a href="#N-11858764785">Relationship</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8168456576">Item</h3>
+					<p>The super-class (in UML terms) of all CASCaRA metamodel items specifying the type of item to allow for simple schema checking and transformation.</p>
+					<p>Details:</p>
+					<ul>
+						<li>The class is abstract.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>Item</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-10610085724">itemType</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Item</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-10597715260">aLink</a>
+									<br/>
+									<a href="#N-9674998090">aProperty</a>
+									<br/>
+									<a href="#N-11476472525">Identifiable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">specializes</td>
+								<td>Item</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10610085724">itemType</h3>
+					<p>Denotes CASCaRA types and instances in terms of this metamodel. It must be made explicit in all representations without native reasoner, such as in object-oriented programming, JSON, JSON-LD and XML. It may be omitted in RDF/OWL, as the top of the type hierarchy shall correspond to the metamodel itemType (see <a href="https://product-information-graph.org/doc/semantic_infrastructure">CASCaRA Semantic Infrastructure</a> and the itemType can be derived with a standard OWL reasoner.</p>
+					<p>Details:</p>
+					<ul>
+						<li>Here it is modeled as a string, but in fact it is an enumerated value for each of the concrete metamodel items (represented as UML classes), thus either Enumeration, Link, Property, Entity, Relationship, aPackage, aProperty, aSourceLink, aTargetLink, anEntity or aRelationship.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-9239676613">Item</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>itemType</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>itemType</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10597715260">aLink</h3>
+					<p>Is a super-class (in UML terms) for link instances <a href="#N-8157368569">aSourceLink</a> and <a href="#N-10761038327">aTargetLink</a>.</p>
+					<p>Details:</p>
+					<ul>
+						<li>The class is abstract.</li>
+						<li>aLink may have multiple enumerated endpoints (references).</li>
+						<li>If its type <a href="#N-9990131015">Link</a> is set to <em>revisionAware</em>, the enumeratedEndpoint is deleted, if the endpoint itself is updated.</li>
+						<li>If its type <a href="#N-9990131015">Link</a> is not set to <em>revisionAware</em>, the enumeratedEndpoint remains, if the endpoint itself is updated.</li>
+						<li>The enumeratedEndpoint is deleted, if the endpoint itself is deleted.</li>
+						<li>aLink is deleted, if it has no more enumeratedEndpoints.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>aLink</td>
+								<td class="statementTitle">hasEndpoint</td>
+								<td>
+									<a href="#N-11107558280">anElement</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>aLink</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-8157368569">aSourceLink</a>
+									<br/>
+									<a href="#N-10761038327">aTargetLink</a>
+									<br/>
+								</td>
+								<td class="statementTitle">specializes</td>
+								<td>aLink</td>
+							</tr>
+							<tr>
+								<td>aLink</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-9239676613">Item</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>aLink</td>
+								<td class="statementTitle">type</td>
+								<td>
+									<a href="#N-9990131015">Link</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11103104135">anElement</h3>
+					<p>A super-class (in UML terms) of <a href="#N-8999785981">anEntity</a> and <a href="#N-12014588218">aRelationship</a>.</p>
+					<p>Details:</p>
+					<ul>
+						<li>The class is abstract.</li>
+						<li>All attributes and associations are inherited by its sub-classes.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-8776684673">aLink</a>
+									<br/>
+								</td>
+								<td class="statementTitle">hasEndpoint</td>
+								<td>anElement</td>
+							</tr>
+							<tr>
+								<td>anElement</td>
+								<td class="statementTitle">hasProperty</td>
+								<td>
+									<a href="#N-10857127627">aProperty</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>anElement</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-8999785981">anEntity</a>
+									<br/>
+									<a href="#N-12014588218">aRelationship</a>
+									<br/>
+								</td>
+								<td class="statementTitle">specializes</td>
+								<td>anElement</td>
+							</tr>
+							<tr>
+								<td>anElement</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-11632284178">Identifiable</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11952730605">Property</h3>
+					<p>Every type <a href="#N-8853048052">Entity</a> and <a href="#N-9878023212">Relationship</a> can have an individual set of configurable properties, each of which is uniquely defined by id (name), datatype and range. A Property is an owl:DatatypeProperty.</p>
+					<p>Details:</p>
+					<ul>
+						<li>Property type must have a title and may have a description.</li>
+						<li>Property type may define a minimum and maximum count of values.</li>
+						<li>Property type must define a datatype and may restrict its range by minInclusive, maxInclusive or or a pattern defined by Regular Expression.</li>
+						<li>A property type may define a default value which must of course satisfy its own data type and range.</li>
+						<li>Property type may be composed of multiple property types to form a structured data type (xs:complexType). The structure must be a tree, thus without cyclic dependency.</li>
+					</ul>
+					<p>Example:</p>
+					<ul>
+						<li>A requirement might have a configurable property, such as &#39;Category&#39; with datatype xs:string with a maximum length of 32.</li>
+						<li>A <em>Priority</em> with a single choice of values [&#39;high&#39;, &#39;medium&#39;, &#39;low&#39;]“ would be defined as a <a href="#N-8717293826">Link</a> to an <a href="#N-11939889726">Enumeration</a>.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>Property</td>
+								<td class="statementTitle">composes</td>
+								<td>
+									<a href="#N-11952730605">Property</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9352780349">Element</a>
+									<br/>
+								</td>
+								<td class="statementTitle">enumeratedProperty</td>
+								<td>Property</td>
+							</tr>
+							<tr>
+								<td>Property</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-10455387746">datatype</a>
+									<br/>
+									<a href="#N-12097694438">maxInclusive</a>
+									<br/>
+									<a href="#N-11686223383">maxLength</a>
+									<br/>
+									<a href="#N-10838117487">minInclusive</a>
+									<br/>
+									<a href="#N-9235844027">pattern</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Property</td>
+							</tr>
+							<tr>
+								<td>Property</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-9252623144">Configurable</a>
+									<br/>
+									<a href="#N-11952730605">Property</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9674998090">aProperty</a>
+									<br/>
+								</td>
+								<td class="statementTitle">type</td>
+								<td>Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10455387746">datatype</h3>
+					<p>One of the xs: data types. Shall be anyURI.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-10837991683">Enumeration</a>
+									<br/>
+									<a href="#N-10592233906">Property</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>datatype</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>datatype</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11686223383">maxLength</h3>
+					<p>Maximum length of a property value with datatype &#39;xs:string&#39;. Is not allowed with any other datatype.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11952730605">Property</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>maxLength</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>maxLength</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10838117487">minInclusive</h3>
+					<p>The minimum value a property of this type may have. May be applied only for numeric datatypes.  It the intrinsic minimum value of the datatype by default.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-10592233906">Property</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>minInclusive</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>minInclusive</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-12097694438">maxInclusive</h3>
+					<p>The maximum value a property of this type may have. May be applied only for numeric datatypes. It the intrinsic maximum value of the datatype by default.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-10592233906">Property</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>maxInclusive</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>maxInclusive</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-9235844027">pattern</h3>
+					<p>A Regular Expression that must evaluate successfully with the property value. Can also be used to limit the number of decimals of a number, as there is no restriction like xs:fractionDigits in SHACL.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11952730605">Property</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>pattern</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>pattern</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-9878023212">Relationship</h3>
+					<p>A type of relationships between two entities to allow assertions such as &#39;a system component satisfies a requirement&#39;. All relationships are bilateral and directed. This allows for statements according to propositional logic. They can be easily mapped to many technologies such as RDF or even ReqIF. Being reified, a Relationship is an owl:Class.</p>
+					<p>Details:</p>
+					<ul>
+						<li>Relationship must have a title (name) and may have a description (definition).</li>
+						<li>Relationship lists zero to many property types its instances may have.</li>
+						<li>Relationship may define (configure) entitiy types or relationship types, whose instances are eligible as source resp. target in a relationship. If none are defined, all entities and relationships are eligible.</li>
+						<li>Relationship is reified (as a rdfs:Resource in RDF), so that it can be a source or target of another Relationship - to make a statement on a statement.</li>
+						<li>The definitions of a relationship together with those of their properties may be used to build user dialogs with input verfication and to check its instances whether all properties have a correct type and value range as well as whether all required ones are present.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>Relationship</td>
+								<td class="statementTitle">enumeratedSourceLink</td>
+								<td>
+									<a href="#N-9990131015">Link</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>Relationship</td>
+								<td class="statementTitle">enumeratedTargetLink</td>
+								<td>
+									<a href="#N-9990131015">Link</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>Relationship</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-9144562788">globalReversed</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Relationship</td>
+							</tr>
+							<tr>
+								<td>Relationship</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-8520877630">Element</a>
+									<br/>
+									<a href="#N-11858764785">Relationship</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-12014588218">aRelationship</a>
+									<br/>
+								</td>
+								<td class="statementTitle">type</td>
+								<td>Relationship</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-9651243443">globalReversed</h3>
+					<p>If set, the instances of the Relationship are interpreted in reverse direction when evaluated in the global graph.</p>
+					<p>Example:</p>
+					<ul>
+						<li>If the ontology defines a term &#39;satisfies&#39;, an incoming relationship named &#39;satisfied-by&#39; is reversed and the globalTitle is set to &#39;satisfies&#39; and globalReversed is set to &#39;true&#39;.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11858764785">Relationship</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>globalReversed</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>globalReversed</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11939889726">Enumeration</h3>
+					<p>A type defining a set of enumerated values, where each value has an <em>id</em> and either a multi-language <em>title</em> in case of datatype xs:string or otherwise a simple <em>value</em>.</p>
+					<p>A corresponding <a href="#N-9990131015">Link</a> type must be defined with an <em>enumeratedEndpoint</em> to this <em>Enumeration</em>. For example, anEntity &#39;Requirement-XYZ&#39; has aTargetLink &#39;Priority&#39; pointing to aValue &#39;medium&#39; being an instance of Enumeration &#39;Priority-Values&#39;.</p>
+					<p>Details:</p>
+					<ul>
+						<li>The set of enumerated values of a specialized Enumeration must be a subset of those of its super-type.</li>
+						<li>Enumeration is modelled as a sub-class of <a href="#N-8520877630">Element</a>, however there is no known use-case where configurable properties (<em>enumeratedProperty</em>) make sense.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>Enumeration</td>
+								<td class="statementTitle">enumeratedValue</td>
+								<td>
+									<a href="#N-11455159608">Value</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>Enumeration</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-12118809206">datatype</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Enumeration</td>
+							</tr>
+							<tr>
+								<td>Enumeration</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-8520877630">Element</a>
+									<br/>
+									<a href="#N-10837991683">Enumeration</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11827052411">datatype</h3>
+					<p>One of the xs: data types. Shall be anyURI.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-10837991683">Enumeration</a>
+									<br/>
+									<a href="#N-10592233906">Property</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>datatype</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>datatype</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11465515319">aPackage</h3>
+					<p>A container for any selection of identifiable metamodel items. Standardized and addressable types can be omitted from aPackage. aPackage may contain specific types (from organization or project ontologies) plus the instances of interest.</p>
+					<p>Details:</p>
+					<ul>
+						<li>The type of aPackage is formally <a href="#N-8853048052">Entity</a>, but should be a sub-type of Organizer (see <a href="https://product-information-graph.org/doc/semantic_infrastructure">CASCaRA Semantic Infrastructure</a>).</li>
+						<li>aPackage can be nested, as it is itself an identifiable metamodel item and can hence be part of the <em>graph</em> of one or more parent aPackage.</li>
+						<li>Additional properties such as <em>license</em> or <em>contributor</em> are defined as an enumeratedProperty in its type Package.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>aPackage</td>
+								<td class="statementTitle">graph</td>
+								<td>
+									<a href="#N-11476472525">Identifiable</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>aPackage</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-10309225565">context</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>aPackage</td>
+							</tr>
+							<tr>
+								<td>aPackage</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-8548475260">anEntity</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10309225565">context</h3>
+					<p>A list of IRIs per namespace abbreviation. Used as sequence of @prefix in RDF/Turtle, sequence of xmlns: in XML and @context in JSON-LD.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11365391228">aPackage</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>context</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>context</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-9252623144">Configurable</h3>
+					<p>Besides &#39;native&#39; properties which are defined by the metamodel (such as title and description), an <a href="#N-8520877630">Element</a> can have configurable properties and links. Those configurable properties and links support a dynamic data model, so that the ontology can evolve over time without software change. Additional detail such as data type and range can be provided to build dynamic forms, for example. It is in fact the core feature to separate CASCaRA syntax and semantics.</p>
+					<p>Details:</p>
+					<ul>
+						<li>This class is abstract.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>Configurable</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-10437796008">defaultValue</a>
+									<br/>
+									<a href="#N-9761053016">globalTitle</a>
+									<br/>
+									<a href="#N-8585607007">maxCount</a>
+									<br/>
+									<a href="#N-8063942153">minCount</a>
+									<br/>
+									<a href="#N-11574712960">readOnly</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Configurable</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9990131015">Link</a>
+									<br/>
+									<a href="#N-10592233906">Property</a>
+									<br/>
+								</td>
+								<td class="statementTitle">specializes</td>
+								<td>Configurable</td>
+							</tr>
+							<tr>
+								<td>Configurable</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-11632284178">Identifiable</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-9984586352">minCount</h3>
+					<p>The minimum count of a &#39;configurable&#39; defined by an <a href="#N-8520877630">Element</a> type for its instances. Thus <a href="#N-11107558280">anElement</a> owning <a href="#N-10857127627">aProperty</a> or <a href="#N-8776684673">aLink</a> must have at least this number of occurrences. Is &#39;0&#39; by default.</p>
+					<p>For example, if a property type &#39;Priority&#39; has a minCount=1 and a requirement type specifies an enumeratedProperty &#39;Priority&#39;, a requirement instance must have at least one property of type Priority (with a value).</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11784662253">Configurable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>minCount</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>minCount</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10849011398">maxCount</h3>
+					<p>The maximum count of a &#39;configurable&#39; defined by an <a href="#N-9352780349">Element</a> type for its instances. Thus  <a href="#N-11103104135">anElement</a> owning <a href="#N-9674998090">aProperty</a> or <a href="#N-10597715260">aLink</a> must have at most this number of occurrences. Is &#39;0&#39; by default.</p>
+					<p>For example, if a property type &#39;Priority&#39; has a maxCount=1 and a requirement type specifies an enumeratedProperty &#39;Priority&#39;, a requirement instance must have no more than one property of type Priority (with a value).</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-9252623144">Configurable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>maxCount</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>maxCount</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8508079247">defaultValue</h3>
+					<p>Optional default value(s) in case an Element&#39;s property does not have an individual value when instantiated.  It may be changed later on, unless readOnly is set, and must follow the definitions of the Property type resp. Link type at all times, of course.</p>
+					<p>Details:</p>
+					<ul>
+						<li>In case of Link, the value must be an identifier of Enumeration, Entity or Relationship.</li>
+						<li>In case of Property, a value of the datatype as specified must be asserted.</li>
+						<li>If the datatype is string, the value is a language string consisting of value and IETF language tag (&#39;multiLangueText&#39;).</li>
+						<li>Otherwise the value is a simple value.</li>
+						<li>Values of all datatypes are represented as a string in all data formats, even JSON and JSON-LD.</li>
+						<li>In the reference implementation, there is no difference in the instance&#39;s value, whether taken from the defaultValue or assigned explicitly. If an explicit value is removed, the defaultValue shall be reassigned.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11784662253">Configurable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>defaultValue</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>defaultValue</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10131653203">readOnly</h3>
+					<p>The property value of an individual <a href="#N-11365391228">aPackage</a>, <a href="#N-8999785981">anEntity</a> or <a href="#N-12014588218">aRelationship</a> is assiged with the defaultValue at creation and may not be updated or deleted during the individual&#39;s lifetime.</p>
+					<p>For example, this feature is needed to represent SysML v2 models where constant attributes are defined at type level and assigned to all instances.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11784662253">Configurable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>readOnly</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>readOnly</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-9711503362">globalTitle</h3>
+					<p>The title assigned by matching the title with the terms of the ontology by the &#39;globalize&#39; operation.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-9252623144">Configurable</a>
+									<br/>
+									<a href="#N-9352780349">Element</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>globalTitle</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>globalTitle</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8598184179">Value</h3>
+					<p>Is a defined value of an <a href="#N-10837991683">Enumeration</a>. If present, it must have either a <em>title</em> or a <em>value</em>.</p>
+					<p>Details:</p>
+					<ul>
+						<li>In case of datatype xs:string, a <em>title</em> must be defined with one or more string values in different languages (&#39;multiLanguageText&#39;).</li>
+						<li>In case of all other datatypes <em>value</em> must be a simple value.</li>
+						<li>in RDF, an enumeratedValue is an individual of its Enumeration.</li>
+						<li>In JSON-LD and XML, any enumeratedValue is defined as a child element of the object resp. tag representing the Enumeration.</li>
+					</ul>
+					<p>An instance (anEntity, aRelationship or aPackage) then has <a href="#N-10761038327">aTargetLink</a> pointing to zero to many (0..n) enumeratedValues with <em>hasView</em>. The permissible number of values is defined by minCount and maxCount of the type of <a href="#N-10761038327">aTargetLink</a>.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-10837991683">Enumeration</a>
+									<br/>
+								</td>
+								<td class="statementTitle">enumeratedValue</td>
+								<td>Value</td>
+							</tr>
+							<tr>
+								<td>Value</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-8848978542">id</a>
+									<br/>
+									<a href="#N-10379162511">title</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-10761038327">aTargetLink</a>
+									<br/>
+								</td>
+								<td class="statementTitle">hasValue</td>
+								<td>Value</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Value</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11160409418">id</h3>
+					<p>A globally unique identifier, either a fully qualified URI or a name with namespace standing for an URI, see <a href="#N-11365391228">aPackage</a>
+						<a href="#N-8616907065">context</a>.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11632284178">Identifiable</a>
+									<br/>
+									<a href="#N-11455159608">Value</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>id</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>id</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-9279192370">title</h3>
+					<p>A multiLanguageText. Maps to dcterms:title or rdf:label.</p>
+					<p>Details:</p>
+					<ul>
+						<li>Here a multiplicity [0..1] is given, but in fact that depends on the itemType.</li>
+						<li>For all classes (Enumeration, Property, Link, Entity and Relationship), a title is mandatory.</li>
+						<li>In case of anEntity at least one of title or description is required, because it must be possible to represent a text paragraph as anEntity, which simply does not have a title.</li>
+						<li>In case of aRelationship both title and description are optional. If missing the title and/or description of the respective Relationship class applies. This avoids lots of repetition in real-world data-sets.</li>
+						<li>The same applies for aProperty, aSourceLink and aTargetLink; both title and description are optional.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11476472525">Identifiable</a>
+									<br/>
+									<a href="#N-8598184179">Value</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>title</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>title</td>
+							</tr>
+						</tbody>
+					</table>
+					<h1 id="N-11195833697">CASCaRA_Schemata</h1>
+					<p>Schemata are (resp. will be) made available for the native CASCaRA formats; they are &#39;Platform Specific Models&#39; (PSM) in OMG terms:</p>
+					<ul>
+						<li>JSON-Schema for <a href="https://product-information-graph.org/schema/latest/jsonld/">CASCaRA JSON-LD</a>.</li>
+						<li>XML-Schema (XSD) for CASCaRA XML <em>(in preparation)</em>
+						</li>
+						<li>RDF <em>(in preparation)</em>.</li>
+					</ul>
+					<p>Note: Schemata can only check the <em>format</em> of a data-set. Constraints apply in addition. Please refer to the Metamodel chapter above.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Package</td>
+							</tr>
+						</tbody>
+					</table>
+					<h1 id="N-FolderGlossary-10052302263">Model Elements (Glossary)</h1>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Model Elements (Glossary)</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8776684673">aLink</h3>
+					<p>Is a super-class (in UML terms) for link instances <a href="#N-8157368569">aSourceLink</a> and <a href="#N-10761038327">aTargetLink</a>.</p>
+					<p>Details:</p>
+					<ul>
+						<li>The class is abstract.</li>
+						<li>aLink may have multiple enumerated endpoints (references).</li>
+						<li>If its type <a href="#N-9990131015">Link</a> is set to <em>revisionAware</em>, the enumeratedEndpoint is deleted, if the endpoint itself is updated.</li>
+						<li>If its type <a href="#N-9990131015">Link</a> is not set to <em>revisionAware</em>, the enumeratedEndpoint remains, if the endpoint itself is updated.</li>
+						<li>The enumeratedEndpoint is deleted, if the endpoint itself is deleted.</li>
+						<li>aLink is deleted, if it has no more enumeratedEndpoints.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>aLink</td>
+								<td class="statementTitle">hasEndpoint</td>
+								<td>
+									<a href="#N-11107558280">anElement</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>aLink</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-8157368569">aSourceLink</a>
+									<br/>
+									<a href="#N-10761038327">aTargetLink</a>
+									<br/>
+								</td>
+								<td class="statementTitle">specializes</td>
+								<td>aLink</td>
+							</tr>
+							<tr>
+								<td>aLink</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-9239676613">Item</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>aLink</td>
+								<td class="statementTitle">type</td>
+								<td>
+									<a href="#N-9990131015">Link</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11107558280">anElement</h3>
+					<p>A super-class (in UML terms) of <a href="#N-8548475260">anEntity</a> and <a href="#N-8479490873">aRelationship</a>.</p>
+					<p>Details:</p>
+					<ul>
+						<li>The class is abstract.</li>
+						<li>All attributes and associations are inherited by its sub-classes.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-10597715260">aLink</a>
+									<br/>
+								</td>
+								<td class="statementTitle">hasEndpoint</td>
+								<td>anElement</td>
+							</tr>
+							<tr>
+								<td>anElement</td>
+								<td class="statementTitle">hasProperty</td>
+								<td>
+									<a href="#N-9674998090">aProperty</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>anElement</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-8548475260">anEntity</a>
+									<br/>
+									<a href="#N-8479490873">aRelationship</a>
+									<br/>
+								</td>
+								<td class="statementTitle">specializes</td>
+								<td>anElement</td>
+							</tr>
+							<tr>
+								<td>anElement</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-11476472525">Identifiable</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8999785981">anEntity</h3>
+					<p>Is used for instances of model-elements such as a system component or a requirement. Is project data (&#39;payload&#39;) having a clear meaning through its type <a href="#N-10961011573">Entity</a>.</p>
+					<p>Details:</p>
+					<ul>
+						<li>anEntity must have either a title or a description - or both. This allows to compose documents including text paragraphs without title.</li>
+						<li>anEntity&#39;s type enumerates the types of <a href="#N-10857127627">aProperty</a> it may have.</li>
+						<li>anEntity&#39;s type also enumerates the types of <a href="#N-10761038327">aTargetLink</a> it may have.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>anEntity</td>
+								<td class="statementTitle">hasTargetLink</td>
+								<td>
+									<a href="#N-10761038327">aTargetLink</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>anEntity</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-11365391228">aPackage</a>
+									<br/>
+								</td>
+								<td class="statementTitle">specializes</td>
+								<td>anEntity</td>
+							</tr>
+							<tr>
+								<td>anEntity</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-11107558280">anElement</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>anEntity</td>
+								<td class="statementTitle">type</td>
+								<td>
+									<a href="#N-10961011573">Entity</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11365391228">aPackage</h3>
+					<p>A container for any selection of identifiable metamodel items. Standardized and addressable types can be omitted from aPackage. aPackage may contain specific types (from organization or project ontologies) plus the instances of interest.</p>
+					<p>Details:</p>
+					<ul>
+						<li>The type of aPackage is formally <a href="#N-10961011573">Entity</a>, but should be a sub-type of Organizer (see <a href="https://product-information-graph.org/doc/semantic_infrastructure">CASCaRA Semantic Infrastructure</a>).</li>
+						<li>aPackage can be nested, as it is itself an identifiable metamodel item and can hence be part of the <em>graph</em> of one or more parent aPackage.</li>
+						<li>Additional properties such as <em>license</em> or <em>contributor</em> are defined as an enumeratedProperty in its type Package.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>aPackage</td>
+								<td class="statementTitle">graph</td>
+								<td>
+									<a href="#N-11632284178">Identifiable</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>aPackage</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-8616907065">context</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>aPackage</td>
+							</tr>
+							<tr>
+								<td>aPackage</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-8999785981">anEntity</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10857127627">aProperty</h3>
+					<p>Each property belongs to a single <a href="#N-8548475260">anEntity</a>, <a href="#N-8479490873">aRelationship</a> or <a href="#N-11465515319">aPackage</a>. A property has <em>no</em> identifier, thus a property update results in a new revision of the item to which it belongs. Is project data (&#39;payload&#39;) having a clear meaning, datatype and range through its type <a href="#N-11952730605">Property</a>.</p>
+					<p>Details:</p>
+					<ul>
+						<li>aProperty may be required or not depending on the attributes minCount and maxCount of its type, but an existing property must have a value.</li>
+						<li>aProperty value can be mutated.</li>
+						<li>aProperty value cannot be deleted, the whole aProperty must be deleted, if so desired.</li>
+						<li>the value of aProperty must conform with the datatype, length, minInclusive, maxInclusive or pattern of its type <a href="#N-11952730605">Property</a>. Not all restrictions apply for all datatypes.</li>
+						<li>aProperty may be composed of multiple aProperties to form a structured data set according to its type.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>aProperty</td>
+								<td class="statementTitle">composes</td>
+								<td>
+									<a href="#N-9674998090">aProperty</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>aProperty</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-10559590179">value</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-11103104135">anElement</a>
+									<br/>
+								</td>
+								<td class="statementTitle">hasProperty</td>
+								<td>aProperty</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>aProperty</td>
+							</tr>
+							<tr>
+								<td>aProperty</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-8168456576">Item</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>aProperty</td>
+								<td class="statementTitle">type</td>
+								<td>
+									<a href="#N-11952730605">Property</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-12014588218">aRelationship</h3>
+					<p>Is used for relations between entities, such as a &#39;system component satisfies a requirement&#39;. All relationships are bilateral and directed. Is project data (&#39;payload&#39;) having a clear meaning through its type <a href="#N-11858764785">Relationship</a>.</p>
+					<p>Details:</p>
+					<ul>
+						<li>This is a reified graph edge and must have exactly one <a href="#N-8157368569">aSourceLink</a> and <a href="#N-10761038327">aTargetLink</a> each.</li>
+						<li>aRelationship is deleted, if either its aSourceLink or its aTargetsLink is deleted.</li>
+						<li>Its aSourceLink and its aTargetLink must have a type listed as <em>enumeratedSourceLink</em> resp. <em>enumeratedTargetLink</em> by its type <a href="#N-11858764785">Relationship</a>.</li>
+						<li>Similarly, its type enumerates the types of <a href="#N-10857127627">aProperty</a> it may have.</li>
+						<li>Even though aRelationship may have an individual title, it is advised to omit it and assume its type&#39;s title to assure that relationships of the same type are named equally.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>aRelationship</td>
+								<td class="statementTitle">hasSourceLink</td>
+								<td>
+									<a href="#N-8157368569">aSourceLink</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>aRelationship</td>
+								<td class="statementTitle">hasTargetLink</td>
+								<td>
+									<a href="#N-10761038327">aTargetLink</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>aRelationship</td>
+							</tr>
+							<tr>
+								<td>aRelationship</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-11107558280">anElement</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>aRelationship</td>
+								<td class="statementTitle">type</td>
+								<td>
+									<a href="#N-11858764785">Relationship</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8157368569">aSourceLink</h3>
+					<p>A link instance serving as source for a reified <a href="#N-12014588218">aRelationship</a>. aSourceLink has <em>no</em> identifier, thus a property update results in a new revision of the item to which it belongs.</p>
+					<p>From a semantic point of view, there is no need to make a distinction between aSourceLink and aTargetLink at the metamodel level. The distinction can be done and <em>is made</em> at ontology level in the <a href="https://product-information-graph.org/doc/semantic_infrastructure">CASCaRA Semantic Infrastructure</a>. However it is much easier to check the pattern/schema/shape and to ingest data, if the itemType makes the distinction.</p>
+					<p>Details:</p>
+					<ul>
+						<li>aSourceLink may be required or not depending on the attributes minCount and maxCount of its type, but an existing one must have a value.</li>
+					</ul>
+					<p>Example:</p>
+					<ul>
+						<li>A relationship &#39;worksFor&#39; can relate an organization instance (target) to one or multiple person instances using <a href="#N-8157368569">aSourceLink</a> named &#39;Employee&#39;.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-12014588218">aRelationship</a>
+									<br/>
+								</td>
+								<td class="statementTitle">hasSourceLink</td>
+								<td>aSourceLink</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>aSourceLink</td>
+							</tr>
+							<tr>
+								<td>aSourceLink</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-8776684673">aLink</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10761038327">aTargetLink</h3>
+					<p>A link instance pointing to the target of a reified <a href="#N-8479490873">aRelationship</a> or to one or more targets of <a href="#N-8548475260">anEntity</a>. aTargetLink has <em>no</em> identifier, thus a property update results in a new revision of the item to which it belongs.</p>
+					<p>From a semantic point of view, there is no need to make a distinction between aSourceLink and aTargetLink at the metamodel level. The distinction can be done and <em>is made</em> at ontology level in the <a href="https://product-information-graph.org/doc/semantic_infrastructure">CASCaRA Semantic Infrastructure</a>. However it is much easier to check the pattern/schema/shape and to ingest data, if the itemType is explicit.</p>
+					<p>Details:</p>
+					<ul>
+						<li>aTargetLink may be required or not depending on the attributes minCount and maxCount of its type <a href="#N-8717293826">Link</a>, but an existing one must have a value.</li>
+					</ul>
+					<p>Examples:</p>
+					<ul>
+						<li>A relationship &#39;worksFor&#39; can relate one or multiple person instances to an organization instance (target) using <a href="#N-8146322038">aTargetLink</a> named &#39;Employer&#39;.</li>
+						<li>An organizer (see <a href="https://product-information-graph.org/doc/semantic_infrastructure">CASCaRA Semantic Infrastructure</a>) such as a chapter title (folder) in an outline can point to one or more contained items, be it anEntity, aRelationship or other.</li>
+						<li>
+							<a href="#N-8548475260">anEntity</a>, <a href="#N-8479490873">aRelationship</a> or <a href="#N-11465515319">aPackage</a> may point to an enumerated <a href="#N-8598184179">Value</a> of an <a href="#N-11939889726">Enumeration</a>. The value must belong to an enumeration listed by <em>enumeratedTargetLink</em> of its type .</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-8548475260">anEntity</a>
+									<br/>
+									<a href="#N-8479490873">aRelationship</a>
+									<br/>
+								</td>
+								<td class="statementTitle">hasTargetLink</td>
+								<td>aTargetLink</td>
+							</tr>
+							<tr>
+								<td>aTargetLink</td>
+								<td class="statementTitle">hasValue</td>
+								<td>
+									<a href="#N-8598184179">Value</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>aTargetLink</td>
+							</tr>
+							<tr>
+								<td>aTargetLink</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-10597715260">aLink</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10469415172">color</h3>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-8520877630">Element</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>color</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>color</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11784662253">Configurable</h3>
+					<p>Besides &#39;native&#39; properties which are defined by the metamodel (such as title and description), an <a href="#N-8520877630">Element</a> can have configurable properties and links. Those configurable properties and links support a dynamic data model, so that the ontology can evolve over time without software change. Additional detail such as data type and range can be provided to build dynamic forms, for example. It is in fact the core feature to separate CASCaRA syntax and semantics.</p>
+					<p>Details:</p>
+					<ul>
+						<li>This class is abstract.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>Configurable</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-10437796008">defaultValue</a>
+									<br/>
+									<a href="#N-9761053016">globalTitle</a>
+									<br/>
+									<a href="#N-8585607007">maxCount</a>
+									<br/>
+									<a href="#N-8063942153">minCount</a>
+									<br/>
+									<a href="#N-11574712960">readOnly</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Configurable</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9990131015">Link</a>
+									<br/>
+									<a href="#N-10592233906">Property</a>
+									<br/>
+								</td>
+								<td class="statementTitle">specializes</td>
+								<td>Configurable</td>
+							</tr>
+							<tr>
+								<td>Configurable</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-11632284178">Identifiable</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8616907065">context</h3>
+					<p>A list of IRIs per namespace abbreviation. Used as sequence of @prefix in RDF/Turtle, sequence of xmlns: in XML and @context in JSON-LD.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11465515319">aPackage</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>context</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>context</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8846296661">creator</h3>
+					<p>The person committing the last change. Is often an e-mail address.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11632284178">Identifiable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>creator</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>creator</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-12118809206">datatype</h3>
+					<p>One of the xs: data types. Shall be anyURI.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-10837991683">Enumeration</a>
+									<br/>
+									<a href="#N-10592233906">Property</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>datatype</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>datatype</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10437796008">defaultValue</h3>
+					<p>Optional default value(s) in case an Element&#39;s property does not have an individual value when instantiated.  It may be changed later on, unless readOnly is set, and must follow the definitions of the Property type resp. Link type at all times, of course.</p>
+					<p>Details:</p>
+					<ul>
+						<li>In case of Link, the value must be an identifier of Enumeration, Entity or Relationship.</li>
+						<li>In case of Property, a value of the datatype as specified must be asserted.</li>
+						<li>If the datatype is string, the value is a language string consisting of value and IETF language tag (&#39;multiLangueText&#39;).</li>
+						<li>Otherwise the value is a simple value.</li>
+						<li>Values of all datatypes are represented as a string in all data formats, even JSON and JSON-LD.</li>
+						<li>In the reference implementation, there is no difference in the instance&#39;s value, whether taken from the defaultValue or assigned explicitly. If an explicit value is removed, the defaultValue shall be reassigned.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-9252623144">Configurable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>defaultValue</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>defaultValue</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8756476138">definition</h3>
+					<p>A multiLanguageText mandatory for all types. Maps to skos:definition.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-8520877630">Element</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>definition</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>definition</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8760453068">description</h3>
+					<p>A multiLanguageText.  Maps to dcterms:description.</p>
+					<p>Details:</p>
+					<ul>
+						<li>Here a multiplicity [0..1] is given, but in fact that depends on the itemType.</li>
+						<li>For all types (Enumeration, Property, Link, Entity and Relationship), a title is mandatory.</li>
+						<li>In case of anEntity at least one of title or description is required, because it must be possible to represent a text paragraph as anEntity, which simply does not have a title.</li>
+						<li>In case of aRelationship both title and description are optional. If missing the title and/or description of the respective Relationship type applies. This avoids lots of repetition in real-world data-sets.</li>
+						<li>The same applies for aProperty, aSourceLink and aTargetLink; both title and description are optional.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11632284178">Identifiable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>description</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>description</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8520877630">Element</h3>
+					<p>A super-class (in UML terms) of <a href="#N-8853048052">Entity</a> (type of entities) and <a href="#N-9878023212">Relationship</a> (type of relationships).</p>
+					<p>Details:</p>
+					<ul>
+						<li>The class is abstract.</li>
+						<li>All attributes and associations are inherited by its sub-classes Entity and Relationship.</li>
+						<li>The globalTitle of the Elements is used to integrate the instances of a partial graphs to an overarching CASCaRA graph.</li>
+						<li>Best practice is to release a set of CASCaRA types (thus all sub-classes of Element) from time to time as a whole. The version id is included in the directory path, so that multiple releases can be hosted in parallel.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-8717293826">Link</a>
+									<br/>
+								</td>
+								<td class="statementTitle">enumeratedEndpoint</td>
+								<td>Element</td>
+							</tr>
+							<tr>
+								<td>Element</td>
+								<td class="statementTitle">enumeratedProperty</td>
+								<td>
+									<a href="#N-11952730605">Property</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>Element</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-11240192038">color</a>
+									<br/>
+									<a href="#N-7957003020">definition</a>
+									<br/>
+									<a href="#N-10543710842">globalTitle</a>
+									<br/>
+									<a href="#N-10252149099">icon</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Element</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-8853048052">Entity</a>
+									<br/>
+									<a href="#N-11939889726">Enumeration</a>
+									<br/>
+									<a href="#N-9878023212">Relationship</a>
+									<br/>
+								</td>
+								<td class="statementTitle">specializes</td>
+								<td>Element</td>
+							</tr>
+							<tr>
+								<td>Element</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-11476472525">Identifiable</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10961011573">Entity</h3>
+					<p>Entity is a type of model elements, such as a system component or a requirement. An Entity is an owl:Class.</p>
+					<p>Details:</p>
+					<ul>
+						<li>Entity should have a title (name) and may have a description (definition).</li>
+						<li>Entity may specify (configure) zero to many types of properties its instances may have.</li>
+						<li>The definitions of the entity together with those of the properties may be used to build user dialogs with input verification as well as to check its instances whether all property values have a correct type and value range as well as whether all required ones are present.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>Entity</td>
+								<td class="statementTitle">enumeratedTargetLink</td>
+								<td>
+									<a href="#N-9990131015">Link</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Entity</td>
+							</tr>
+							<tr>
+								<td>Entity</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-8520877630">Element</a>
+									<br/>
+									<a href="#N-10961011573">Entity</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-8999785981">anEntity</a>
+									<br/>
+								</td>
+								<td class="statementTitle">type</td>
+								<td>Entity</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10837991683">Enumeration</h3>
+					<p>A type defining a set of enumerated values, where each value has an <em>id</em> and either a multi-language <em>title</em> in case of datatype xs:string or otherwise a simple <em>value</em>.</p>
+					<p>A corresponding <a href="#N-9990131015">Link</a> type must be defined with an <em>enumeratedEndpoint</em> to this <em>Enumeration</em>. For example, anEntity &#39;Requirement-XYZ&#39; has aTargetLink &#39;Priority&#39; pointing to aValue &#39;medium&#39; being an instance of Enumeration &#39;Priority-Values&#39;.</p>
+					<p>Details:</p>
+					<ul>
+						<li>The set of enumerated values of a specialized Enumeration must be a subset of those of its super-type.</li>
+						<li>Enumeration is modelled as a sub-class of <a href="#N-8520877630">Element</a>, however there is no known use-case where configurable properties (<em>enumeratedProperty</em>) make sense.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>Enumeration</td>
+								<td class="statementTitle">enumeratedValue</td>
+								<td>
+									<a href="#N-11455159608">Value</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>Enumeration</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-12118809206">datatype</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Enumeration</td>
+							</tr>
+							<tr>
+								<td>Enumeration</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-8520877630">Element</a>
+									<br/>
+									<a href="#N-10837991683">Enumeration</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-9144562788">globalReversed</h3>
+					<p>If set, the instances of the Relationship are interpreted in reverse direction when evaluated in the global graph.</p>
+					<p>Example:</p>
+					<ul>
+						<li>If the ontology defines a term &#39;satisfies&#39;, an incoming relationship named &#39;satisfied-by&#39; is reversed and the globalTitle is set to &#39;satisfies&#39; and globalReversed is set to &#39;true&#39;.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-9878023212">Relationship</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>globalReversed</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>globalReversed</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-9761053016">globalTitle</h3>
+					<p>The title assigned by matching the title with the terms of the ontology by the &#39;globalize&#39; operation.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11784662253">Configurable</a>
+									<br/>
+									<a href="#N-8520877630">Element</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>globalTitle</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>globalTitle</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11182494579">icon</h3>
+					<p>An icon defined with a type can be used to decorate the instances.</p>
+					<p>Example:</p>
+					<ul>
+						<li>Folders as sub-type of Organizer and thus Entity may specify a UTF-8 character 🗀 for use by folders grouping certain model-elements.</li>
+						<li>A data-URL is also permitted as an icon.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-8520877630">Element</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>icon</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>icon</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8848978542">id</h3>
+					<p>A globally unique identifier, either a fully qualified URI or a name with namespace standing for an URI, see <a href="#N-11465515319">aPackage</a>
+						<a href="#N-10309225565">context</a>.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11476472525">Identifiable</a>
+									<br/>
+									<a href="#N-8598184179">Value</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>id</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>id</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11632284178">Identifiable</h3>
+					<p>All sub-classes of this class (in UML terms) are identifiable, means they have an identifier, a title (name) and optionally a description.</p>
+					<p>Details:</p>
+					<ul>
+						<li>The class is abstract.</li>
+						<li>All attributes are inherited by its subclasses.</li>
+						<li>All type level items in the upper part of the diagram are commonly released and made available with an URL path including the revision. Hence, multiple revisions of a type set may exist in parallel.</li>
+						<li>All instance level items in the lower part of the diagram may be updated individually with change information <em>modified</em>, <em>revision</em>, <em>priorRevision</em> and <em>creator</em>. The prior revision identifier is memorized to support change history and branching. In case of a merge, there are two prior revisions.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11365391228">aPackage</a>
+									<br/>
+								</td>
+								<td class="statementTitle">graph</td>
+								<td>Identifiable</td>
+							</tr>
+							<tr>
+								<td>Identifiable</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-8846296661">creator</a>
+									<br/>
+									<a href="#N-8760453068">description</a>
+									<br/>
+									<a href="#N-8848978542">id</a>
+									<br/>
+									<a href="#N-11292181894">modified</a>
+									<br/>
+									<a href="#N-8945329143">priorRevision</a>
+									<br/>
+									<a href="#N-8660305830">revision</a>
+									<br/>
+									<a href="#N-10379162511">title</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Identifiable</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-11107558280">anElement</a>
+									<br/>
+									<a href="#N-11784662253">Configurable</a>
+									<br/>
+									<a href="#N-8520877630">Element</a>
+									<br/>
+								</td>
+								<td class="statementTitle">specializes</td>
+								<td>Identifiable</td>
+							</tr>
+							<tr>
+								<td>Identifiable</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-9239676613">Item</a>
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-9239676613">Item</h3>
+					<p>The super-class (in UML terms) of all CASCaRA metamodel items specifying the type of item to allow for simple schema checking and transformation.</p>
+					<p>Details:</p>
+					<ul>
+						<li>The class is abstract.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>Item</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-10213214561">itemType</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Item</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-8776684673">aLink</a>
+									<br/>
+									<a href="#N-10857127627">aProperty</a>
+									<br/>
+									<a href="#N-11632284178">Identifiable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">specializes</td>
+								<td>Item</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10213214561">itemType</h3>
+					<p>Denotes CASCaRA types and instances in terms of this metamodel. It must be made explicit in all representations without native reasoner, such as in object-oriented programming, JSON, JSON-LD and XML. It may be omitted in RDF/OWL, as the top of the type hierarchy shall correspond to the metamodel itemType (see <a href="https://product-information-graph.org/doc/semantic_infrastructure">CASCaRA Semantic Infrastructure</a> and the itemType can be derived with a standard OWL reasoner.</p>
+					<p>Details:</p>
+					<ul>
+						<li>Here it is modeled as a string, but in fact it is an enumerated value for each of the concrete metamodel items (represented as UML classes), thus either Enumeration, Link, Property, Entity, Relationship, aPackage, aProperty, aSourceLink, aTargetLink, anEntity or aRelationship.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-8168456576">Item</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>itemType</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>itemType</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-9990131015">Link</h3>
+					<p>Is an identifiable link type. It is used as a named connector between a reified <a href="#N-11858764785">Relationship</a> and its source and target, or as a named connector between an <a href="#N-10961011573">Entity</a> and a directly related target. A Link is an owl:ObjectProperty.</p>
+					<p>Details:</p>
+					<ul>
+						<li>A link type can be specialized by another. For example the most global &#39;linksTarget&#39; may be specialized by &#39;depicts&#39;.</li>
+						<li>If <em>revisionAware</em> is set for a Link, each endpoint of its instances is deleted as soon as the referenced endpoint itself is updated.</li>
+					</ul>
+					<p>Examples:</p>
+					<ul>
+						<li>An Organizer (semantic sub-type of <a href="#N-10961011573">Entity</a>) may list Requirements (another semantic sub-type of Entity) to construct a document outline. As such the Link type <em>lists</em> is specified as enumeratedTargetLink by Organizer.</li>
+						<li>An <a href="#N-10961011573">Entity</a> Requirement might have a property with enumerated values [&#39;high&#39;, &#39;medium&#39; or &#39;low&#39;]. This is represented by a Link type pointing to an <a href="#N-10837991683">Enumeration</a> defining those values.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>Link</td>
+								<td class="statementTitle">enumeratedEndpoint</td>
+								<td>
+									<a href="#N-8520877630">Element</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-11858764785">Relationship</a>
+									<br/>
+								</td>
+								<td class="statementTitle">enumeratedSourceLink</td>
+								<td>Link</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-10961011573">Entity</a>
+									<br/>
+									<a href="#N-11858764785">Relationship</a>
+									<br/>
+								</td>
+								<td class="statementTitle">enumeratedTargetLink</td>
+								<td>Link</td>
+							</tr>
+							<tr>
+								<td>Link</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-8465100120">revisionAware</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Link</td>
+							</tr>
+							<tr>
+								<td>Link</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-11784662253">Configurable</a>
+									<br/>
+									<a href="#N-9990131015">Link</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-8776684673">aLink</a>
+									<br/>
+								</td>
+								<td class="statementTitle">type</td>
+								<td>Link</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8585607007">maxCount</h3>
+					<p>The maximum count of a &#39;configurable&#39; defined by an <a href="#N-8520877630">Element</a> type for its instances. Thus  <a href="#N-11107558280">anElement</a> owning <a href="#N-10857127627">aProperty</a> or <a href="#N-8776684673">aLink</a> must have at most this number of occurrences. Is &#39;0&#39; by default.</p>
+					<p>For example, if a property type &#39;Priority&#39; has a maxCount=1 and a requirement type specifies an enumeratedProperty &#39;Priority&#39;, a requirement instance must have no more than one property of type Priority (with a value).</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11784662253">Configurable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>maxCount</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>maxCount</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-9252281528">maxInclusive</h3>
+					<p>The maximum value a property of this type may have. May be applied only for numeric datatypes. It the intrinsic maximum value of the datatype by default.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11952730605">Property</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>maxInclusive</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>maxInclusive</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11666167787">maxLength</h3>
+					<p>Maximum length of a property value with datatype &#39;xs:string&#39;. Is not allowed with any other datatype.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-10592233906">Property</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>maxLength</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>maxLength</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8063942153">minCount</h3>
+					<p>The minimum count of a &#39;configurable&#39; defined by an <a href="#N-8520877630">Element</a> type for its instances. Thus <a href="#N-11107558280">anElement</a> owning <a href="#N-10857127627">aProperty</a> or <a href="#N-8776684673">aLink</a> must have at least this number of occurrences. Is &#39;0&#39; by default.</p>
+					<p>For example, if a property type &#39;Priority&#39; has a minCount=1 and a requirement type specifies an enumeratedProperty &#39;Priority&#39;, a requirement instance must have at least one property of type Priority (with a value).</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11784662253">Configurable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>minCount</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>minCount</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8148388355">minInclusive</h3>
+					<p>The minimum value a property of this type may have. May be applied only for numeric datatypes.  It the intrinsic minimum value of the datatype by default.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11952730605">Property</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>minInclusive</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>minInclusive</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11292181894">modified</h3>
+					<p>A ISO-8601 DateTime value recording the point in time of the last change.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11632284178">Identifiable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>modified</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>modified</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11452891983">pattern</h3>
+					<p>A Regular Expression that must evaluate successfully with the property value. Can also be used to limit the number of decimals of a number, as there is no restriction like xs:fractionDigits in SHACL.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-10592233906">Property</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>pattern</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>pattern</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8945329143">priorRevision</h3>
+					<p>Links to the previous revisions of an entity or relationship instance. It is a list with</p>
+					<ul>
+						<li>zero elements, if it is the first revision,</li>
+						<li>one element for a subsequent revision or</li>
+						<li>two elements when two branches are merged.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11476472525">Identifiable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>priorRevision</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>priorRevision</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10592233906">Property</h3>
+					<p>Every type <a href="#N-10961011573">Entity</a> and <a href="#N-11858764785">Relationship</a> can have an individual set of configurable properties, each of which is uniquely defined by id (name), datatype and range. A Property is an owl:DatatypeProperty.</p>
+					<p>Details:</p>
+					<ul>
+						<li>Property type must have a title and may have a description.</li>
+						<li>Property type may define a minimum and maximum count of values.</li>
+						<li>Property type must define a datatype and may restrict its range by minInclusive, maxInclusive or or a pattern defined by Regular Expression.</li>
+						<li>A property type may define a default value which must of course satisfy its own data type and range.</li>
+						<li>Property type may be composed of multiple property types to form a structured data type (xs:complexType). The structure must be a tree, thus without cyclic dependency.</li>
+					</ul>
+					<p>Example:</p>
+					<ul>
+						<li>A requirement might have a configurable property, such as &#39;Category&#39; with datatype xs:string with a maximum length of 32.</li>
+						<li>A <em>Priority</em> with a single choice of values [&#39;high&#39;, &#39;medium&#39;, &#39;low&#39;]“ would be defined as a <a href="#N-9990131015">Link</a> to an <a href="#N-10837991683">Enumeration</a>.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>Property</td>
+								<td class="statementTitle">composes</td>
+								<td>
+									<a href="#N-10592233906">Property</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-8520877630">Element</a>
+									<br/>
+								</td>
+								<td class="statementTitle">enumeratedProperty</td>
+								<td>Property</td>
+							</tr>
+							<tr>
+								<td>Property</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-12118809206">datatype</a>
+									<br/>
+									<a href="#N-9252281528">maxInclusive</a>
+									<br/>
+									<a href="#N-11666167787">maxLength</a>
+									<br/>
+									<a href="#N-8148388355">minInclusive</a>
+									<br/>
+									<a href="#N-11452891983">pattern</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Property</td>
+							</tr>
+							<tr>
+								<td>Property</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-11784662253">Configurable</a>
+									<br/>
+									<a href="#N-10592233906">Property</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-10857127627">aProperty</a>
+									<br/>
+								</td>
+								<td class="statementTitle">type</td>
+								<td>Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11574712960">readOnly</h3>
+					<p>The property value of an individual <a href="#N-11365391228">aPackage</a>, <a href="#N-8999785981">anEntity</a> or <a href="#N-12014588218">aRelationship</a> is assiged with the defaultValue at creation and may not be updated or deleted during the individual&#39;s lifetime.</p>
+					<p>For example, this feature is needed to represent SysML v2 models where constant attributes are defined at type level and assigned to all instances.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11784662253">Configurable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>readOnly</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>readOnly</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11858764785">Relationship</h3>
+					<p>A type of relationships between two entities to allow assertions such as &#39;a system component satisfies a requirement&#39;. All relationships are bilateral and directed. This allows for statements according to propositional logic. They can be easily mapped to many technologies such as RDF or even ReqIF. Being reified, a Relationship is an owl:Class.</p>
+					<p>Details:</p>
+					<ul>
+						<li>Relationship must have a title (name) and may have a description (definition).</li>
+						<li>Relationship lists zero to many property types its instances may have.</li>
+						<li>Relationship may define (configure) entitiy types or relationship types, whose instances are eligible as source resp. target in a relationship. If none are defined, all entities and relationships are eligible.</li>
+						<li>Relationship is reified (as a rdfs:Resource in RDF), so that it can be a source or target of another Relationship - to make a statement on a statement.</li>
+						<li>The definitions of a relationship together with those of their properties may be used to build user dialogs with input verfication and to check its instances whether all properties have a correct type and value range as well as whether all required ones are present.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>Relationship</td>
+								<td class="statementTitle">enumeratedSourceLink</td>
+								<td>
+									<a href="#N-8717293826">Link</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>Relationship</td>
+								<td class="statementTitle">enumeratedTargetLink</td>
+								<td>
+									<a href="#N-8717293826">Link</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>Relationship</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-9651243443">globalReversed</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Relationship</td>
+							</tr>
+							<tr>
+								<td>Relationship</td>
+								<td class="statementTitle">specializes</td>
+								<td>
+									<a href="#N-9352780349">Element</a>
+									<br/>
+									<a href="#N-9878023212">Relationship</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-8479490873">aRelationship</a>
+									<br/>
+								</td>
+								<td class="statementTitle">type</td>
+								<td>Relationship</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8660305830">revision</h3>
+					<p>A unique string identifying the revision of the entity or relationship instance.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11632284178">Identifiable</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>revision</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>revision</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-8465100120">revisionAware</h3>
+					<p>Indicates whether an instance of this type is valid for a <em>specific</em> or <em>any</em> revision of the specified endpoints.</p>
+					<p>Details:</p>
+					<ul>
+						<li>If <em>revisionAware</em> is set, all references occurring as endpoint of its instances are deleted as soon as the endpoint itself is updated; otherwise they are preserved.</li>
+						<li>In rare cases only one of a <a href="#N-11858764785">Relationship</a>&#39;s <em>enumeratedSourceLink</em> or <em>enumeratedTargetLink</em> can be &#39;revisionAware&#39;.</li>
+					</ul>
+					<p>Examples:</p>
+					<ul>
+						<li>
+							<a href="#N-8776684673">aLink</a> named <em>lists</em> of an outline (folder) shall continue to reference an endpoint, even if updated. So <em>revisionAware</em> of its <a href="#N-9990131015">Link</a> type is omitted or set to &#39;false&#39;.</li>
+						<li>
+							<a href="#N-12014588218">aRelationship</a> named <em>verifies</em> shall apply between specific revisions of a <em>test-case</em> and a <em>requirement</em>. So the types of both <a href="#N-8157368569">aSourceLink</a> and <a href="#N-10761038327">aTargetLink</a> set <em>revisionAware</em> to &#39;true&#39;. If the <em>requirement</em> is updated, it has no more <em>verifies</em> relationship, until explicitly set after repeating the <em>test-case</em>.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-9990131015">Link</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>revisionAware</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>revisionAware</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-10379162511">title</h3>
+					<p>A multiLanguageText. Maps to dcterms:title or rdf:label.</p>
+					<p>Details:</p>
+					<ul>
+						<li>Here a multiplicity [0..1] is given, but in fact that depends on the itemType.</li>
+						<li>For all classes (Enumeration, Property, Link, Entity and Relationship), a title is mandatory.</li>
+						<li>In case of anEntity at least one of title or description is required, because it must be possible to represent a text paragraph as anEntity, which simply does not have a title.</li>
+						<li>In case of aRelationship both title and description are optional. If missing the title and/or description of the respective Relationship class applies. This avoids lots of repetition in real-world data-sets.</li>
+						<li>The same applies for aProperty, aSourceLink and aTargetLink; both title and description are optional.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-11476472525">Identifiable</a>
+									<br/>
+									<a href="#N-8598184179">Value</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>title</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>title</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11026861278">value</h3>
+					<p>The value of <a href="#N-10857127627">aProperty</a>.</p>
+					<p>Details:</p>
+					<ul>
+						<li>If the datatype of the property&#39;s type is string, the value is a language string consisting of value and IETF language tag (&#39;multiLangueText&#39;). If there is a value in only one language, the language tag is optional.</li>
+						<li>Some convention is needed when a string is an expression - out of scope at present.</li>
+						<li>Otherwise the value is a simple value.</li>
+						<li>The rules of XML Schema apply, for example value compatibility: &quot;99&quot;^^xsd:integer  = &quot;99.0&quot;^^xsd:decimal.</li>
+					</ul>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>uml:Property</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-10857127627">aProperty</a>
+									<br/>
+								</td>
+								<td class="statementTitle">has part</td>
+								<td>value</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>value</td>
+							</tr>
+						</tbody>
+					</table>
+					<h3 id="N-11455159608">Value</h3>
+					<p>Is a defined value of an <a href="#N-10837991683">Enumeration</a>. If present, it must have either a <em>title</em> or a <em>value</em>.</p>
+					<p>Details:</p>
+					<ul>
+						<li>In case of datatype xs:string, a <em>title</em> must be defined with one or more string values in different languages (&#39;multiLanguageText&#39;).</li>
+						<li>In case of all other datatypes <em>value</em> must be a simple value.</li>
+						<li>in RDF, an enumeratedValue is an individual of its Enumeration.</li>
+						<li>In JSON-LD and XML, any enumeratedValue is defined as a child element of the object resp. tag representing the Enumeration.</li>
+					</ul>
+					<p>An instance (anEntity, aRelationship or aPackage) then has <a href="#N-10761038327">aTargetLink</a> pointing to zero to many (0..n) enumeratedValues with <em>hasView</em>. The permissible number of values is defined by minCount and maxCount of the type of <a href="#N-10761038327">aTargetLink</a>.</p>
+					<p class="metaTitle">Properties</p>
+					<table class="propertyTable">
+						<tbody>
+							<tr>
+								<td class="propertyTitle">Element Type</td>
+								<td>Class</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="metaTitle">Statements</p>
+					<table class="statementTable">
+						<tbody>
+							<tr>
+								<td>
+									<a href="#N-10837991683">Enumeration</a>
+									<br/>
+								</td>
+								<td class="statementTitle">enumeratedValue</td>
+								<td>Value</td>
+							</tr>
+							<tr>
+								<td>Value</td>
+								<td class="statementTitle">has part</td>
+								<td>
+									<a href="#N-8848978542">id</a>
+									<br/>
+									<a href="#N-10379162511">title</a>
+									<br/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-10761038327">aTargetLink</a>
+									<br/>
+								</td>
+								<td class="statementTitle">hasValue</td>
+								<td>Value</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="#N-9134739822">CASCaRA_Metamodel_Diagram</a>
+									<br/>
+								</td>
+								<td class="statementTitle">shows</td>
+								<td>Value</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
